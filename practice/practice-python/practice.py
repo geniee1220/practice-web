@@ -340,3 +340,248 @@ print(cabinet.get(3))
 # print(cabinet.get(5,"사용 가능")) None대신 "사용 가능"을 리턴
 
 print(3 in cabinet) # 3번 key가 cabinet 변수에 존재하는지 확인 , 존재 시 True 없을 경우 False
+
+
+cabinet = {"A-3":"슬기","B-100":"유진"}
+
+# 새로운 키를 할당
+cabinet["C-20"] = "다혜"
+print(cabinet)
+
+# 키 삭제
+del cabinet["A-3"]
+print(cabinet)
+
+# 키만 출력
+print(cabinet.keys())
+
+# 값만 출력
+print(cabinet.values())
+
+# 키와 값을 쌍으로 출력
+print(cabinet.items()) # dict_items([('B-100', '유진'), ('C-20', '다혜')])
+
+# 모든 값을 삭제
+cabinet.clear()
+print(cabinet)
+
+
+
+## 튜플 - 내용의 변경이나 추가를 할 수 없다. 변경되지 않은 목록을 사용할 때 활용 
+menu = ("김밥","떡볶이")
+print(menu[0])
+
+# menu.add("라면") error! -> 튜플은 add를 제공하지 않는다
+
+# name = "장유진"
+# age = 29
+# job = "Frontend Developer"
+# 튜플의 형식은 다음과 같이 한 번에 표현 가능
+(name, age, job) = "장유진",29,"Frontend Developer"
+
+
+## 집합(세트)
+# 중복이 안 되고, 순서가 없다.
+# 오브젝트와 달리 값만 나열
+my_set = {1,2,3,3}
+print(my_set)
+
+java = {"슬기","유진","다혜"}
+python = set(["슬기","나미"])
+
+# 교집합을 출력(집합을 비교하여 동일한 값 출력)
+print(java & python) 
+print(java.intersection(python))
+
+# 합집합 출력을 출력(집합을 비교하여 값을 합쳐서 출력)
+print(java | python)
+print(java.union(python)) # union -> 합집합을 의미
+
+# 차집합(집합에서 동일한 집합 값을 제거한 후 출력 )
+print(java - python)
+print(java.difference(python))
+
+# 집합에 값을 추가
+python.add("진아")
+print(python)
+
+# 집합에 값을 삭제
+java.remove("다혜")
+
+
+
+## 자료구조의 변경
+menu = {"커피","우유","주스"}
+print(menu,type(menu)) # set {}
+
+menu = list(menu)
+print(menu,type(menu)) # list []
+
+menu = tuple(menu)
+print(menu,type(menu)) # tuple ()
+
+menu = set(menu)
+print(menu,type(menu)) 
+
+
+
+## Quiz
+'''
+    당신의 학교에서는 파이썬 코딩 대회를 주최합니다.
+    참석률을 높이기 위해 댓글 이벤트를 진행하기로 하였습니다.
+    댓글 작성자들 중에 추첨을 통해 1명은 치킨, 3명은 커피 쿠폰을 받게 됩니다.
+    추첨 프로그램을 작성하시오.
+
+    조건1 : 편의상 댓글은 20명이 작성하였고 아이디는 1~20이라고 가정
+    조건2 : 댓글 내용과 상관 없이 무작위로 추첨하되 중복 불가
+    조건3 : random 모듈의 shuffle 과 sample을 활용
+
+    (출력 예제)
+    -- 당첨자 발표 --
+    치킨 당첨자 : 1
+    커피 당첨자 : [2,3,4]
+    -- 축하합니다 --
+
+    (활용 예제)
+    from random import *
+    lst = [1,2,3,4,5]
+    print(lst)
+    shuffle(lst)
+    print(lst)
+    print(sample(lst,1))
+'''
+
+
+# ------ 1
+# arr = [1, 23,6,2,31,5432,346,45, 63,412]
+# # arr = arr.sort() # 리턴값 없음. 배열의 원본을 건드림(원본이 바뀜)
+# print(arr)
+# temp = sorted(arr) # 원본을 건드리지않음 새롭게 정렬된 arr을 반환
+# print(arr)
+# print(temp)
+
+# temp = []
+# for i in range(len(comment)):
+#     if comment[i] != chicken[0]:
+#         temp.append(comment[i])
+# coffee = sample(temp, 3)
+
+# ------ 2
+# from random import *
+# comment = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20]
+
+# shuffle(comment)
+
+# chicken = sample(comment,1)
+# print(chicken)
+# coffee  = sample(list(set(comment) - set(chicken)), 3)
+# print(coffee)
+
+
+from random import *
+users = range(1,21) # 1부터 20까지 숫자를 생성
+print(type(users)) # type -> range
+users = list(users)
+print(type(users))
+
+print(users)
+shuffle(users)
+print(users)
+
+winners = sample(users,4) # 4명 중에서 1명은 치킨, 3명은 커피
+
+
+print("-- 당첨자 발표 --")
+print("치킨 당첨자 : {0}".format(winners[0]))
+print("커피 당첨자 : {0}".format(winners[1:]))
+print("-- 축하합니다 --")
+
+
+
+## 분기 if 
+# if 조건 :
+#   return
+# elif 조건 :
+#   return
+# else :
+#   return 
+
+# weather = input("오늘 날씨는 어때요? ")
+# if weather == "비" or weather == "눈":
+#     print("우산을 챙기세요")
+# elif weather == "미세먼지":
+#     print("마스크를 챙기세요")
+# else:
+#     print("준비물 필요 없어요")
+
+
+# temp = int(input("기온은 어때요? ")) # 사용한 값을 정수 형태로 변환해서 temp에 저장
+# if 30 <= temp:
+#     print("너무 더워요. 나가지 마세요")
+# elif 10 <= temp and temp < 30:
+#     print("괜찮은 날씨예요")
+# elif 0 <= temp < 10:
+#     print("외투를 챙기세요")
+# else:
+#     print("너무 추워요. 나가지 마세요.")
+
+
+
+## 반복문 for
+# print("대기번호 : 1")
+# print("대기번호 : 2")
+
+for waiting_no in [0,1,2,3,4]:
+    print("대기번호: {0}".format(waiting_no))
+
+# randrange()
+for waiting_no in range(1,6):
+    print("대기번호: {0}".format(waiting_no))
+
+
+
+starbucks = ["아이언맨","스파이더맨","닥터 스트레인지"]
+for customer in starbucks:
+    print("{0}님, 커피가 준비되었습니다.".format(customer))
+
+
+
+## 반복문 while
+customer = "토르"
+index = 5
+
+# while (조건) :
+# 조건이 만족할 때까지 반복
+while index >=1:
+    print("{0}, 커피가 준비 되었습니다. {1}번 남았어요.".format(customer,index))
+    index -= 1
+    if index == 0:
+        print("커피는 폐기처분 되었습니다.")
+
+
+# customer = "아이언맨"
+# index = 1
+# while True:
+#     print("{0}, 커피가 준비 되었습니다. 호출 {1}회".format(customer.index))
+#     index += 1 # 무한 루프. ctrl + c를 누르면 강제 종료
+
+
+# customer = "스파이더맨"
+# person = "Unknown"
+
+# while person != customer:
+#     print("{0}, 커피가 준비 되었습니다.".format(customer))
+#     person = input("이름이 어떻게 되세요? ")
+
+
+
+# contiune, break
+absent = [2,5] # 결석
+no_book = [7] # 책이 없음
+for student in range(1,11): # 1부터 10번까지
+    if student in absent:
+        continue
+    elif student in no_book:
+        print("오늘 수업 여기까지. {0}은 교무실로 따라와".format(student))
+        break
+    print("{0}, 책을 읽어봐".format(student))
