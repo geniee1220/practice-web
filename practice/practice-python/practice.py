@@ -585,3 +585,119 @@ for student in range(1,11): # 1부터 10번까지
         print("오늘 수업 여기까지. {0}은 교무실로 따라와".format(student))
         break
     print("{0}, 책을 읽어봐".format(student))
+
+
+# 한 줄 for 
+# 출석번호가 1 2 3 4, 앞에 100을 붙이기로 했다면 -> 101,102,103,104.
+students = [1,2,3,4,5]
+print(students)
+students = [i+100 for i in students] # students 안에 있는 하나하나의 요소를 i로 접근해서, 각각의 i에 100을 더해서 반환
+print(students)
+
+# 학생 이름을 길이로 변환
+students = ["Iron-Man","Captain America","Spider-Man"]
+students = [len(i) for i in students]
+print(students)
+
+# 학생 이름을 대문자로 변환
+students = ["Iron-Man","Captain America","Spider-Man"]
+students = [i.upper() for i in students]
+print(students)
+
+
+
+## Quiz
+'''
+    당신은 Cocoa 서비스를 이용하는 택시 기사님입니다.
+    50명의 승객과 매칭 기회가 있을 때, 총 탑승 승객 수를 구하는 프로그램을 작성하시오.
+
+    조건1 : 승객별 운행 소요 기간은 5분~ 50분 사이의 난수로 정해집니다.
+    조건2 : 당신은 소요시간 5분 ~ 15분 사이의 승객만 매칭해야 합니다.
+
+    (출력문 예제)
+    [0] 1번째 손님 (소요시간 : 15분)
+    [ ] 2번째 손님 (소요시간 : 50분)
+    [0] 3번째 손님 (소요시간 : 5분)
+    ...
+    [ ] 50번째 손님 (소요시간 : 16분)
+
+    총 탑승 승객 : 2분 
+'''
+
+count = 0
+for customer in range(1,51):
+    customerTime = sample(range(5,51),1)[0]
+    if 15 >= customerTime >= 5:
+        status = "0" 
+        count += 1
+    else:
+        status = " "
+
+    print(f"[{status}] {customer}번째 손님 (소요시간 : {customerTime}분)")
+    
+print(f"총 탑승 승객 : {count}분")
+
+
+
+### def 함수 정의
+def open_account():
+    print("새로운 계좌가 생성되었습니다.")
+
+
+def deposit(balance, money):
+    print("입금이 완료되었습니다. 잔액은 {0}원 입니다.".format(balance + money))
+    return balance + money
+
+balance = 0 # 잔액 0원
+balance = deposit(balance, 3000)
+print(balance)
+
+
+def withdraw(balance, money):
+    if balance >= money: 
+        print("출금이 완료되었습니다. 잔액은 {0}원 입니다.".format(balance - money))
+        return balance - money
+    else :
+        print("출금을 할 수 없습니다. 잔액이 부족합니다.")
+        return balance
+
+balance = withdraw(balance,500)
+
+
+def withdraw_night(balance, money): #저녁에 출금
+    commission = 100
+    return commission, balance - money - commission 
+    # 튜플 형식으로 반환, 내용의 변경이나 추가를 할 수 없다. 변경되지 않은 목록을 사용할 때 활용 
+
+commission, balance = withdraw_night(balance,500)
+print("수수료 {0}원이며, 잔액은 {1}원입니다.".format(commission,balance))
+
+
+
+### 기본값 
+def profile(name,age,main_lang):
+    print(f"이름 :{name}\n나이 :{age}\n주 사용 언어:{main_lang}")
+
+profile("유진",29,"한국어")
+
+
+def profile_default(name,age=20,main_lang="한국어"):
+    print(f"이름: {name}\n나이: {age}\n주 사용 언어: {main_lang}")
+
+profile_default("테스트")
+profile_default("테스트",1)
+
+
+def profile_keyword(name,age,main_lang):
+    print(name, age, main_lang)
+
+profile_keyword(name="테스트",main_lang="영어",age="28")
+
+
+
+### 가변인자
+def profile_variable(name, age, lang1, lang2, lang3, lang4, lang5):
+    print("이름: {0}\t나이: {1}\t".format(name,age), end=" ")
+    print(lang1, lang2, lang3, lang4, lang5)
+
+profile_variable("유진",29,"Python","React","Javascript","Next","")
