@@ -127,6 +127,7 @@ print(randint(1,45)) # 1~45 이하의 임의의 값 생성
 
 
 
+
 ## Quiz
 '''
     당신은 최근에 코딩 스터디 모임을 새로 만들었습니다.
@@ -674,7 +675,7 @@ print("수수료 {0}원이며, 잔액은 {1}원입니다.".format(commission,bal
 
 
 
-### 기본값 
+### 기본값
 def profile(name,age,main_lang):
     print(f"이름 :{name}\n나이 :{age}\n주 사용 언어:{main_lang}")
 
@@ -696,8 +697,34 @@ profile_keyword(name="테스트",main_lang="영어",age="28")
 
 
 ### 가변인자
-def profile_variable(name, age, lang1, lang2, lang3, lang4, lang5):
+# def profile_variable(name, age, lang1, lang2, lang3, lang4, lang5):
+#     print("이름: {0}\t나이: {1}\t".format(name,age), end=" ")
+#     print(lang1, lang2, lang3, lang4, lang5)
+
+def profile_variable(name, age, *language):
     print("이름: {0}\t나이: {1}\t".format(name,age), end=" ")
-    print(lang1, lang2, lang3, lang4, lang5)
+    for lang in language:
+        print(lang, end=" ")
+    print()
 
 profile_variable("유진",29,"Python","React","Javascript","Next","")
+profile_variable("지수",29,"Python","React","Javascript","Next","Kotolin")
+
+
+### 지역변수와 전역변수
+gun = 10
+
+def checkpoint(soliders): # 경계근무를 안 하는 군인의 수
+    global gun # 전역 공간에 있는 gun 사용 
+    gun = gun - soliders
+    print("[함수 내] 남은 총 : {0}".format(gun))
+
+def checkpoint_ret(gun, soliders): # 경계근무를 안 하는 군인의 수
+    gun = gun - soliders
+    print("[함수 내] 남은 총 : {0}".format(gun))
+    return gun
+
+print("전체 총:{0}".format(gun))
+# checkpoint(2)
+gun = checkpoint_ret(gun, 2)
+print("남은 총:{0}".format(gun))
