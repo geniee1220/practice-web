@@ -728,3 +728,109 @@ print("전체 총:{0}".format(gun))
 # checkpoint(2)
 gun = checkpoint_ret(gun, 2)
 print("남은 총:{0}".format(gun))
+
+
+## Quiz 
+'''
+표준 체중을 구하는 프로그램을 작성하세요
+
+* 표준 체중 : 각 개인의 키에 적당한 체중
+
+(성별에 따른 공식)
+남자 : 키(m) * 키(m) * 22
+여자 : 키(m) * 키(m) * 21
+
+조건1 : 표준 체중은 별도의 함수 내에서 계산 
+    * 함수명 : std_weight
+    * 전달값 : 키(height), 성별(gender) 
+조건2 : 표준 체중은 소수점 둘째자리까지 표시
+
+(출력예제)
+키 175cm 남자의 표준 체중은 67.38kg입니다.
+'''
+
+def std_weight(height,gender):
+    standard = 0
+    heightM = height * 0.01
+
+    if gender == "여자":
+        standard = round(heightM * heightM * 22,2)
+    else:
+        standard = round(heightM * heightM * 21,2)
+
+    print(f"키 {height} {gender}의 표준 체중은 {standard}입니다.")
+
+
+std_weight(169,"여자")
+
+# round 함수! 
+
+
+'''
+풀이 
+
+# 키 m단위 (실수). 성별은 string
+def std_weight(height, gender): 
+    if gender == "남자":
+        return height * height * 22
+    else:
+        return height * height * 21
+
+height = 175 #cm
+gender = "남자"
+weight = round(std_weight(height / 100,gender),2) 
+'''
+
+
+### 표준 입출력
+print("python","Java", sep=",", end="?")
+print("무엇이 더 재밌을까요?")
+
+import sys
+print("python","Java", file=sys.stdout) # 표준 출력
+print("python","Java", file=sys.stderr) # 표준 에러? 
+
+# 시험 성적
+scores = {"수학":0, "영어":50, "코딩":100}
+for subject, score in scores.items():
+    print(subject.ljust(8), str(score).rjust(4), sep=":") #왼쪽 정렬, 8칸 공간 확보 및 오른쪽 정렬, 4칸 공간 확보 
+
+# 은행 대기 순번표
+# 001, 002, 003... 
+for num in range(1,21):
+    print("대기번호 : " + str(num).zfill(3)) 
+    # 3자리 수에서 값이 없는 빈 공간만큼 0으로 채운다
+
+# answer = input("아무 값이나 입력하세요 : ")
+# print(type(answer)) # 사용자의 입력을 통해서 받게되는 형태는 항상 str
+# print("입력하신 값은 " + answer + "입니다.")
+
+
+### 다양한 출력포맷
+
+# 빈 자리는 빈 공간으로 두고, 오른쪽 정렬을 하되, 총 10자리 공간을 확보
+# 부등호로 오른쪽 정렬, 왼쪽 정렬!
+print("{0: >10}".format(500))
+ 
+# 양수일 땐 +로 표시, 음수일 땐 -로 표시 
+print("{0: >+10}".format(500))
+print("{0: >+10}".format(-500))
+
+# 왼쪽 정렬하고, 빈칸을 _로 채움
+print("{0:_<+10}".format(500))
+
+# 3자리마다 콤마를 찍어주기
+print("{0:,}".format(100000000))
+
+# 3자리마다 콤마를 찍어주기 / +-부호도 붙이기
+print("{0:+,}".format(100000000))
+
+# 3자리마다 콤마를 찍어주기, 부호도 붙이고, 자릿수 확보
+# 돈이 많으면 행복하니까 빈 자리는 ^ 로 채우기
+print("{0:^<+30,}".format(1000000000))
+
+# 소수점 출력
+print("{0:f}".format(5/3))
+
+# 소수점을 특정 자리수까지만 보여주고 싶을 표시(소수점 3째 자리에서 반올림)
+print("{0:.2f}".format(5/3))
