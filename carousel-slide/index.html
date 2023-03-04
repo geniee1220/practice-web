@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Infinite Carousel</title>
+
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+      }
+
+      .slider {
+        position: relative;
+        width: 100vw;
+        max-width: 50%;
+        height: 150px;
+        margin: auto;
+        overflow: hidden;
+      }
+
+      .slide {
+        width: 100%;
+        height: 300px;
+        position: absolute;
+        text-align: center;
+        -webkit-transition: 0.6s ease;
+        transition: 0.6s ease;
+        -webkit-transform: translate(-100%, 0);
+        transform: translate(-100%, 0);
+      }
+
+      .slide.active {
+        -webkit-transform: translate(0, 0);
+        transform: translate(0, 0);
+      }
+
+      .slide.active ~ .slide {
+        -webkit-transform: translate(100%, 0);
+        transform: translate(100%, 0);
+      }
+
+      * {
+        -webkit-box-sizing: border-box;
+        box-sizing: border-box;
+      }
+
+      body {
+        text-align: center;
+      }
+
+      .slide {
+        background: #222;
+        color: white;
+        padding: 30px;
+      }
+
+      button {
+        margin-top: 20px;
+        border: none;
+        border-radius: 0;
+        background: aliceblue;
+        color: #333;
+        padding: 10px;
+        cursor: pointer;
+      }
+    </style>
+  </head>
+
+  <body>
+    <div class="slider__wrapper">
+      <div class="slider">
+        <div class="slide active">
+          <h3>Slide One</h3>
+          <p>test</p>
+        </div>
+        <div class="slide">
+          <h3>Slide Two</h3>
+          <p>test</p>
+        </div>
+        <div class="slide">
+          <h3>Slide Three</h3>
+          <p>test</p>
+        </div>
+      </div>
+
+      <button id="prev" class="btn">Prev</button>
+      <button id="next" class="btn">Next</button>
+    </div>
+
+    <script>
+      var sliderInterval = "";
+      function movement(e) {
+        slider = document.querySelector(".slider");
+        last = slider.lastElementChild;
+        first = slider.firstElementChild;
+
+        const activeSlide = document.querySelector(".active");
+
+        if (e.target.id === "next") {
+          slider.insertBefore(first, last.nextSibling);
+
+          activeSlide.classList.remove("active");
+          activeSlide.nextElementSibling.classList.add("active");
+        } else {
+          slider.insertBefore(last, first);
+          activeSlide.classList.remove("active");
+          activeSlide.previousElementSibling.classList.add("active");
+        }
+      }
+      function slider() {
+        let slides = document.querySelectorAll(".slide"),
+          slider = document.querySelector(".slider");
+
+        console.log("slider=========", slider);
+
+        let last = slider.lastElementChild,
+          first = slider.firstElementChild,
+          btn = document.querySelectorAll(".btn");
+
+        slider.insertBefore(last, first);
+
+        btn.forEach((btn) => {
+          btn.addEventListener("click", movement);
+        });
+
+        sliderInterval = setInterval(function () {
+          movement({
+            target: {
+              id: "next",
+            },
+          });
+        }, 3000);
+      }
+      slider();
+
+      let slides = document.querySelectorAll(".slide");
+      for (i = 0; i < slides.length; i++) {
+        console.log("slides[i]=========", slides[i]);
+        slides[i].addEventListener("mouseenter", function () {
+          console.log("on mouseenter");
+          clearInterval(sliderInterval);
+        });
+        slides[i].addEventListener("mouseleave", function () {
+          sliderInterval = setInterval(function () {
+            movement({
+              target: {
+                id: "next",
+              },
+            });
+          }, 3000);
+        });
+      }
+    </script>
+  </body>
+</html>
