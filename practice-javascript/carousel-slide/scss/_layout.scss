@@ -1,0 +1,109 @@
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  border: 0;
+  clip: rect(0, 0, 0, 0);
+  overflow: hidden;
+}
+
+.slider__wrapper {
+  position: relative;
+  width: 630px;
+  height: 760px;
+  margin: 120px auto;
+  overflow: hidden;
+}
+
+.slider {
+  position: relative;
+  display: flex;
+  height: 100%;
+}
+
+.slide {
+  width: 630px;
+  height: 760px;
+  flex-shrink: 0;
+  padding: 180px 120px 120px;
+  color: white;
+  background: rgb(83, 32, 109);
+  background: linear-gradient(
+    144deg,
+    rgba(83, 32, 109, 1) 5%,
+    rgba(9, 9, 121, 1) 49%,
+    rgba(83, 32, 109, 1) 99%
+  );
+
+  -webkit-transition-duration: 0.5s;
+  -moz-transition-duration: 0.5s;
+  -o-transition-duration: 0.5s;
+  transition-duration: 0.5s;
+  -webkit-transition-property: -webkit-transform;
+  -moz-transition-property: -moz-transform;
+  -o-transition-property: -o-transform;
+  transition-property: transform;
+
+  .slide__title {
+    font-size: 46px;
+    line-height: 68px;
+  }
+
+  .slide__link {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 168px;
+    height: 58px;
+    margin-top: 58px;
+    border-radius: 26px;
+    border: 1px solid #fff;
+    color: #fff;
+    font-size: 15px;
+    font-weight: bold;
+  }
+  //   -webkit-transition: 0.6s ease;
+  //   transition: 0.6s ease;
+  //   -webkit-transform: translate(-100%, 0);
+  //   transform: translate(-100%, 0);
+}
+
+// .slide.active {
+//   -webkit-transform: translate(0, 0);
+//   transform: translate(0, 0);
+// }
+
+// .slide.active ~ .slide {
+//   -webkit-transform: translate(100%, 0);
+//   transform: translate(100%, 0);
+// }
+
+// translateX(-100%)
+
+.slider-control {
+  position: absolute;
+  display: flex;
+  align-items: center;
+  bottom: 115px;
+  left: 120px;
+
+  .control__button {
+    border: none;
+    border-radius: 0;
+    width: 40px;
+    height: 40px;
+    color: #fff;
+    cursor: pointer;
+    svg {
+      width: 100%;
+      height: 100%;
+    }
+  }
+
+  .slide-count {
+    margin-left: 10px;
+    color: #fff;
+  }
+}

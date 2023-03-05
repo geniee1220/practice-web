@@ -4,155 +4,204 @@
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Infinite Carousel</title>
+    <title>Infinite Carousel Slide</title>
+    <link rel="stylesheet" href="./carousel.css" />
 
-    <style>
-      * {
-        margin: 0;
-        padding: 0;
-      }
-
-      .slider {
-        position: relative;
-        width: 100vw;
-        max-width: 50%;
-        height: 150px;
-        margin: auto;
-        overflow: hidden;
-      }
-
-      .slide {
-        width: 100%;
-        height: 300px;
-        position: absolute;
-        text-align: center;
-        -webkit-transition: 0.6s ease;
-        transition: 0.6s ease;
-        -webkit-transform: translate(-100%, 0);
-        transform: translate(-100%, 0);
-      }
-
-      .slide.active {
-        -webkit-transform: translate(0, 0);
-        transform: translate(0, 0);
-      }
-
-      .slide.active ~ .slide {
-        -webkit-transform: translate(100%, 0);
-        transform: translate(100%, 0);
-      }
-
-      * {
-        -webkit-box-sizing: border-box;
-        box-sizing: border-box;
-      }
-
-      body {
-        text-align: center;
-      }
-
-      .slide {
-        background: #222;
-        color: white;
-        padding: 30px;
-      }
-
-      button {
-        margin-top: 20px;
-        border: none;
-        border-radius: 0;
-        background: aliceblue;
-        color: #333;
-        padding: 10px;
-        cursor: pointer;
-      }
-    </style>
+    <style></style>
   </head>
 
   <body>
-    <div class="slider__wrapper">
+    <main class="slider__wrapper">
+      <h1 class="sr-only">Infinite Carousel Slide</h1>
+
+      <!-- slider  -->
       <div class="slider">
-        <div class="slide active">
-          <h3>Slide One</h3>
-          <p>test</p>
+        <!-- slide1 -->
+        <div class="slide slide1">
+          <p class="slide__category">JavaScript</p>
+          <h2 class="slide__title">Today-I-Learned Carousel Slide1</h2>
+
+          <a
+            href="https://github.com/geniee1220/practice-javascript/tree/main/carousel-slide"
+            class="slide__link"
+          >
+            Go to Github
+          </a>
         </div>
-        <div class="slide">
-          <h3>Slide Two</h3>
-          <p>test</p>
+        <!-- slide2-->
+        <div class="slide slide2">
+          <p class="slide__category">JavaScript</p>
+          <h2 class="slide__title">Today-I-Learned Carousel Slide2</h2>
+
+          <a
+            href="https://github.com/geniee1220/practice-javascript/tree/main/carousel-slide"
+            class="slide__link"
+          >
+            Go to Github
+          </a>
         </div>
-        <div class="slide">
-          <h3>Slide Three</h3>
-          <p>test</p>
+        <!-- slide3 -->
+        <div class="slide slide3">
+          <p class="slide__category">JavaScript</p>
+          <h2 class="slide__title">Today-I-Learned Carousel Slide3</h2>
+
+          <a
+            href="https://github.com/geniee1220/practice-javascript/tree/main/carousel-slide"
+            class="slide__link"
+          >
+            Go to Github
+          </a>
         </div>
       </div>
 
-      <button id="prev" class="btn">Prev</button>
-      <button id="next" class="btn">Next</button>
-    </div>
+      <!-- slider control -->
+      <div class="slider-control">
+        <button id="prevBtn" class="control__button prev">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 40.47 40.47">
+            <g transform="translate(40.47 40.47) rotate(180)">
+              <path d="M0,0H40.47V40.47H0Z" fill="none" />
+              <path
+                d="M24.525,15.651,15.48,6.606l2.384-2.384L30.98,17.338,17.864,30.453,15.48,28.069l9.045-9.045H4V15.651Z"
+                transform="translate(2.745 2.897)"
+                fill="#fff"
+              />
+            </g>
+          </svg>
+        </button>
+        <button id="nextBtn" class="control__button next">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 40.47 40.47">
+            <path d="M0,0H40.47V40.47H0Z" fill="none" />
+            <path
+              d="M24.525,15.651,15.48,6.606l2.384-2.384L30.98,17.338,17.864,30.453,15.48,28.069l9.045-9.045H4V15.651Z"
+              transform="translate(2.745 2.897)"
+              fill="#fff"
+            />
+          </svg>
+        </button>
+
+        <p class="slide-count">
+          <span class="current-slide"></span>
+          &nbsp;/&nbsp;
+          <span class="all-slide"></span>
+        </p>
+      </div>
+    </main>
 
     <script>
-      var sliderInterval = "";
-      function movement(e) {
-        slider = document.querySelector(".slider");
-        last = slider.lastElementChild;
-        first = slider.firstElementChild;
+      (function () {
+        "use strict";
 
-        const activeSlide = document.querySelector(".active");
+        const get = (target) => {
+          const els = document.querySelectorAll(target);
+          return els.length > 1 ? els : els[0];
+        };
 
-        if (e.target.id === "next") {
-          slider.insertBefore(first, last.nextSibling);
+        const $slider = get(".slider");
 
-          activeSlide.classList.remove("active");
-          activeSlide.nextElementSibling.classList.add("active");
-        } else {
-          slider.insertBefore(last, first);
-          activeSlide.classList.remove("active");
-          activeSlide.previousElementSibling.classList.add("active");
-        }
-      }
-      function slider() {
-        let slides = document.querySelectorAll(".slide"),
-          slider = document.querySelector(".slider");
+        const $slideCount = get(".all-slide");
+        const $currentSlide = get(".current-slide");
+        const $prevBtn = get("#prevBtn");
+        const $nextBtn = get("#nextBtn");
+        const $slide = get(".slide");
 
-        console.log("slider=========", slider);
+        const slideWidth = $slide[0].clientWidth;
+        const slideAmount = $slide.length;
+        const sliderWidth = slideWidth * slideAmount;
+        const slideSpeed = 500;
 
-        let last = slider.lastElementChild,
-          first = slider.firstElementChild,
-          btn = document.querySelectorAll(".btn");
+        let translationComplete = false;
+        let currentIndex = 1;
+        let moveOffset = 0;
 
-        slider.insertBefore(last, first);
+        const slideAutoPlay = () => {
+          setInterval(() => {
+            handleSwipe(1);
 
-        btn.forEach((btn) => {
-          btn.addEventListener("click", movement);
-        });
-
-        sliderInterval = setInterval(function () {
-          movement({
-            target: {
-              id: "next",
-            },
-          });
-        }, 3000);
-      }
-      slider();
-
-      let slides = document.querySelectorAll(".slide");
-      for (i = 0; i < slides.length; i++) {
-        console.log("slides[i]=========", slides[i]);
-        slides[i].addEventListener("mouseenter", function () {
-          console.log("on mouseenter");
-          clearInterval(sliderInterval);
-        });
-        slides[i].addEventListener("mouseleave", function () {
-          sliderInterval = setInterval(function () {
-            movement({
-              target: {
-                id: "next",
-              },
-            });
+            if (currentIndex === $slider.children.length - 1) {
+              setTimeout(() => {
+                $slider.style.transition = "none";
+                currentIndex = 1;
+                moveOffset = (100 / slideAmount) * currentIndex;
+                $slider.style.transform = `translateX(-${moveOffset}%)`;
+              }, slideSpeed);
+            }
           }, 3000);
-        });
-      }
+        };
+
+        /**
+         * direction
+         * next : 1, prev : -1
+         *
+         * handleSwipe는 이전, 다음 버튼을 클릭하거나 자동으로 슬라이드가 넘어갈 때 실행되는 함수로
+         * 같은 함수에서 이전, 다음 버튼을 클릭했을 때의 이벤트를 구분하기 위해
+         * direction을 사용한다.
+         */
+        const handleSwipe = (direction) => {
+          currentIndex = currentIndex + direction;
+
+          moveOffset = (100 / slideAmount) * currentIndex;
+
+          $slider.style.transform = `translateX(-${moveOffset}%)`;
+          $slider.style.transition = `all ${slideSpeed}ms ease`;
+        };
+
+        const handleMoveBtn = () => {
+          event.preventDefault();
+          const $target = event.currentTarget;
+
+          if ($target.id === "nextBtn") {
+            handleSwipe(1);
+
+            if (currentIndex === $slider.children.length - 1) {
+              setTimeout(() => {
+                $slider.style.transition = "none";
+                currentIndex = 1;
+                moveOffset = (100 / slideAmount) * currentIndex;
+                $slider.style.transform = `translateX(-${moveOffset}%)`;
+              }, slideSpeed);
+            }
+          } else {
+            handleSwipe(-1);
+
+            if (currentIndex === 0) {
+              setTimeout(() => {
+                $slider.style.transition = "none";
+                currentIndex = $slider.children.length - 2;
+                moveOffset = (100 / slideAmount) * currentIndex;
+                $slider.style.transform = `translateX(-${moveOffset}%)`;
+              }, slideSpeed);
+            }
+          }
+          translationComplete = false;
+        };
+
+        // 레아아웃 셋업
+        const setSlideLayout = () => {
+          // 무한 슬라이드를 위해 첫번째 슬라이드와 마지막 슬라이드를 복제
+          const $firstSlideClone = $slider.firstElementChild.cloneNode(true);
+          const $lastSlideClone = $slider.lastElementChild.cloneNode(true);
+
+          $slider.insertBefore($lastSlideClone, $slider.firstElementChild);
+          $slider.appendChild($firstSlideClone);
+
+          // 슬라이드의 너비를 설정하고, 1번째 슬라이드로 위치 초기화 (translateX)
+          $slider.style.width = `${sliderWidth}px`;
+          $slider.style.transform = `translateX(-${slideWidth}px)`;
+        };
+
+        const init = () => {
+          setSlideLayout();
+
+          slideAutoPlay();
+
+          $slideCount.textContent = slideAmount;
+
+          $prevBtn.addEventListener("click", handleMoveBtn);
+          $nextBtn.addEventListener("click", handleMoveBtn);
+        };
+
+        window.addEventListener("DOMContentLoaded", init);
+      })();
     </script>
   </body>
 </html>
