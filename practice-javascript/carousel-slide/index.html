@@ -17,7 +17,7 @@
       <!-- slider  -->
       <div class="slider">
         <!-- slide1 -->
-        <div class="slide slide1">
+        <div class="slide" data-index="1">
           <p class="slide__category">JavaScript</p>
           <h2 class="slide__title">Today-I-Learned Carousel Slide1</h2>
 
@@ -29,7 +29,7 @@
           </a>
         </div>
         <!-- slide2-->
-        <div class="slide slide2">
+        <div class="slide" data-index="2">
           <p class="slide__category">JavaScript</p>
           <h2 class="slide__title">Today-I-Learned Carousel Slide2</h2>
 
@@ -41,7 +41,7 @@
           </a>
         </div>
         <!-- slide3 -->
-        <div class="slide slide3">
+        <div class="slide" data-index="3">
           <p class="slide__category">JavaScript</p>
           <h2 class="slide__title">Today-I-Learned Carousel Slide3</h2>
 
@@ -87,121 +87,6 @@
       </div>
     </main>
 
-    <script>
-      (function () {
-        "use strict";
-
-        const get = (target) => {
-          const els = document.querySelectorAll(target);
-          return els.length > 1 ? els : els[0];
-        };
-
-        const $slider = get(".slider");
-
-        const $slideCount = get(".all-slide");
-        const $currentSlide = get(".current-slide");
-        const $prevBtn = get("#prevBtn");
-        const $nextBtn = get("#nextBtn");
-        const $slide = get(".slide");
-
-        const slideWidth = $slide[0].clientWidth;
-        const slideAmount = $slide.length;
-        const sliderWidth = slideWidth * slideAmount;
-        const slideSpeed = 500;
-
-        let translationComplete = false;
-        let currentIndex = 1;
-        let moveOffset = 0;
-
-        const slideAutoPlay = () => {
-          setInterval(() => {
-            handleSwipe(1);
-
-            if (currentIndex === $slider.children.length - 1) {
-              setTimeout(() => {
-                $slider.style.transition = "none";
-                currentIndex = 1;
-                moveOffset = (100 / slideAmount) * currentIndex;
-                $slider.style.transform = `translateX(-${moveOffset}%)`;
-              }, slideSpeed);
-            }
-          }, 3000);
-        };
-
-        /**
-         * direction
-         * next : 1, prev : -1
-         *
-         * handleSwipe는 이전, 다음 버튼을 클릭하거나 자동으로 슬라이드가 넘어갈 때 실행되는 함수로
-         * 같은 함수에서 이전, 다음 버튼을 클릭했을 때의 이벤트를 구분하기 위해
-         * direction을 사용한다.
-         */
-        const handleSwipe = (direction) => {
-          currentIndex = currentIndex + direction;
-
-          moveOffset = (100 / slideAmount) * currentIndex;
-
-          $slider.style.transform = `translateX(-${moveOffset}%)`;
-          $slider.style.transition = `all ${slideSpeed}ms ease`;
-        };
-
-        const handleMoveBtn = () => {
-          event.preventDefault();
-          const $target = event.currentTarget;
-
-          if ($target.id === "nextBtn") {
-            handleSwipe(1);
-
-            if (currentIndex === $slider.children.length - 1) {
-              setTimeout(() => {
-                $slider.style.transition = "none";
-                currentIndex = 1;
-                moveOffset = (100 / slideAmount) * currentIndex;
-                $slider.style.transform = `translateX(-${moveOffset}%)`;
-              }, slideSpeed);
-            }
-          } else {
-            handleSwipe(-1);
-
-            if (currentIndex === 0) {
-              setTimeout(() => {
-                $slider.style.transition = "none";
-                currentIndex = $slider.children.length - 2;
-                moveOffset = (100 / slideAmount) * currentIndex;
-                $slider.style.transform = `translateX(-${moveOffset}%)`;
-              }, slideSpeed);
-            }
-          }
-          translationComplete = false;
-        };
-
-        // 레아아웃 셋업
-        const setSlideLayout = () => {
-          // 무한 슬라이드를 위해 첫번째 슬라이드와 마지막 슬라이드를 복제
-          const $firstSlideClone = $slider.firstElementChild.cloneNode(true);
-          const $lastSlideClone = $slider.lastElementChild.cloneNode(true);
-
-          $slider.insertBefore($lastSlideClone, $slider.firstElementChild);
-          $slider.appendChild($firstSlideClone);
-
-          // 슬라이드의 너비를 설정하고, 1번째 슬라이드로 위치 초기화 (translateX)
-          $slider.style.width = `${sliderWidth}px`;
-          $slider.style.transform = `translateX(-${slideWidth}px)`;
-        };
-
-        const init = () => {
-          setSlideLayout();
-
-          slideAutoPlay();
-
-          $slideCount.textContent = slideAmount;
-
-          $prevBtn.addEventListener("click", handleMoveBtn);
-          $nextBtn.addEventListener("click", handleMoveBtn);
-        };
-
-        window.addEventListener("DOMContentLoaded", init);
-      })();
-    </script>
+    <script src="./carousel.js"></script>
   </body>
 </html>
