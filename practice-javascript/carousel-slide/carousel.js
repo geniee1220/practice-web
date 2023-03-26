@@ -9,6 +9,7 @@
   const $slideContainer = get(".slider__wrapper");
   const $slider = get(".slider");
 
+  const $slideIndicator = get(".slide-count");
   const $totalSlides = get(".all-slide");
   const $currentSlide = get(".current-slide");
   const $prevBtn = get(".control__button.prev");
@@ -24,6 +25,22 @@
   let moveOffset = 0;
 
   let interval;
+
+  // 슬라이드 접근성 설정
+  const setAccessibility = () => {
+    for (let i = 0; i < $slider.children.length; i++) {
+      if (i === currentIndex) {
+        $slider.children[i].setAttribute("aria-hidden", false);
+      } else {
+        $slider.children[i].setAttribute("aria-hidden", true);
+      }
+    }
+
+    setTimeout(() => {
+      $slideIndicator.setAttribute("aria-label", `slide ${$currentSlide.textContent} of ${slideAmount}`);
+    }, 100);
+    
+  };
 
   // 자동 재생 함수
   const slideAutoPlay = () => {
@@ -63,6 +80,8 @@
     if (currentIndex <= 0) {
       $currentSlide.textContent =
         $slider.children[$slider.children.length - 2].dataset.index;
+        // slide-count에 aria-label 속성을 추가하고 현재 슬라이드의 인덱스를 추가한다.
+        $slideIndicator.setAttribute("aria-label", `${$currentSlide.textContent}/${slideAmount}`);
     } else if (currentIndex >= $slider.children.length - 1) {
       $currentSlide.textContent = $slider.children[1].dataset.index;
     } else {
@@ -71,6 +90,8 @@
 
     $slider.style.transform = `translateX(-${moveOffset}%)`;
     $slider.style.transition = `all ${slideSpeed}ms ease`;
+
+    setAccessibility();
   };
 
   // 이전, 다음 버튼 클릭 이벤트 핸들러
@@ -115,6 +136,8 @@
     // 슬라이드의 너비를 설정하고, 1번째 슬라이드로 위치 초기화 (translateX)
     $slider.style.width = `${sliderWidth}px`;
     $slider.style.transform = `translateX(-${slideWidth}px)`;
+
+    setAccessibility();
   };
 
   const handleMouseEnter = (event) => {
@@ -139,8 +162,8 @@
       fn(...args);
     };
   };
-  
-  const handleMoveBtnThrottled = throttle(handleMoveBtn, 1000); 
+
+  const handleMoveBtnThrottled = throttle(handleMoveBtn, 1000);
 
   const init = () => {
     setSlideLayout();

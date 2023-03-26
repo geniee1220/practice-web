@@ -11,15 +11,17 @@
   </head>
 
   <body>
-    <main class="slider__wrapper">
+    <main class="slider__wrapper" aria-live="polite">
       <h1 class="sr-only">Infinite Carousel Slide</h1>
 
       <!-- slider  -->
       <div class="slider">
         <!-- slide1 -->
-        <div class="slide" data-index="1">
+        <div class="slide" data-index="1" aria-labelledby="slide1">
           <p class="slide__category">JavaScript</p>
-          <h2 class="slide__title">Today-I-Learned Carousel Slide1</h2>
+          <h2 class="slide__title" id="slide1">
+            Today-I-Learned Carousel Slide1
+          </h2>
 
           <a
             href="https://github.com/geniee1220/practice-javascript/tree/main/carousel-slide"
@@ -29,9 +31,11 @@
           </a>
         </div>
         <!-- slide2-->
-        <div class="slide" data-index="2">
+        <div class="slide" data-index="2" aria-labelledby="slide2">
           <p class="slide__category">JavaScript</p>
-          <h2 class="slide__title">Today-I-Learned Carousel Slide2</h2>
+          <h2 class="slide__title" id="slide2">
+            Today-I-Learned Carousel Slide2
+          </h2>
 
           <a
             href="https://github.com/geniee1220/practice-javascript/tree/main/carousel-slide"
@@ -41,9 +45,11 @@
           </a>
         </div>
         <!-- slide3 -->
-        <div class="slide" data-index="3">
+        <div class="slide" data-index="3" aria-labelledby="slide3">
           <p class="slide__category">JavaScript</p>
-          <h2 class="slide__title">Today-I-Learned Carousel Slide3</h2>
+          <h2 class="slide__title" id="slide3">
+            Today-I-Learned Carousel Slide3
+          </h2>
 
           <a
             href="https://github.com/geniee1220/practice-javascript/tree/main/carousel-slide"
@@ -56,7 +62,11 @@
 
       <!-- slider control -->
       <div class="slider-control">
-        <button id="prevBtn" class="control__button prev">
+        <button
+          id="prevBtn"
+          class="control__button prev"
+          aria-label="Previous slide button"
+        >
           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 40.47 40.47">
             <g transform="translate(40.47 40.47) rotate(180)">
               <path d="M0,0H40.47V40.47H0Z" fill="none" />
@@ -68,7 +78,11 @@
             </g>
           </svg>
         </button>
-        <button id="nextBtn" class="control__button next">
+        <button
+          id="nextBtn"
+          class="control__button next"
+          aria-label="Next slide button"
+        >
           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 40.47 40.47">
             <path d="M0,0H40.47V40.47H0Z" fill="none" />
             <path
@@ -79,10 +93,14 @@
           </svg>
         </button>
 
-        <p class="slide-count">
+        <p class="slide-count" aria-describedby="slide-description">
           <span class="current-slide"></span>
           &nbsp;/&nbsp;
           <span class="all-slide"></span>
+        </p>
+
+        <p id="slide-description" class="sr-only">
+          Use the previous and next buttons to navigate between the slides.
         </p>
       </div>
     </main>
