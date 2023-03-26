@@ -36,6 +36,7 @@
       }
     }
 
+    // slide-count에 aria-label 속성을 추가하고 현재 슬라이드의 인덱스를 추가한다.
     setTimeout(() => {
       $slideIndicator.setAttribute("aria-label", `slide ${$currentSlide.textContent} of ${slideAmount}`);
     }, 100);
@@ -80,8 +81,6 @@
     if (currentIndex <= 0) {
       $currentSlide.textContent =
         $slider.children[$slider.children.length - 2].dataset.index;
-        // slide-count에 aria-label 속성을 추가하고 현재 슬라이드의 인덱스를 추가한다.
-        $slideIndicator.setAttribute("aria-label", `${$currentSlide.textContent}/${slideAmount}`);
     } else if (currentIndex >= $slider.children.length - 1) {
       $currentSlide.textContent = $slider.children[1].dataset.index;
     } else {
