@@ -1,6 +1,7 @@
 (function () {
   "use strict";
 
+  // querySelectorAll 메서드를 사용하여 단일 / 복수 요소를 선택하는 유틸 함수
   const get = (target) => {
     const els = document.querySelectorAll(target);
     return els.length > 1 ? els : els[0];
@@ -26,7 +27,7 @@
 
   let interval;
 
-  // 슬라이드 접근성 설정
+  // 현재 슬라이드 인덱스를 기준으로 슬라이더 구성요소에 대한 접근성 속성을 설정
   const setAccessibility = () => {
     for (let i = 0; i < $slider.children.length; i++) {
       if (i === currentIndex) {
