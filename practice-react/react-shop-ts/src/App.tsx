@@ -11,6 +11,7 @@ import NotFound from "./pages/NotFound";
 import Accessory from "./pages/Accessory";
 import Digital from "./pages/Digital";
 import Layout from "./pages/Layout";
+import CategoryLayout from "./components/Category/CategoryLayout";
 
 function App() {
   // 테마
@@ -42,7 +43,7 @@ function App() {
 
       <Routes>
         <Route path="/" element={<Home />} />
-        {/* <Route path="/:category" element={<Category />} /> */}
+        <Route path="/:category" element={<CategoryLayout />} />
         <Route path="/product/:productId" element={<ProductDetail />} />
         <Route path="*" element={<NotFound />} />
       </Routes>
