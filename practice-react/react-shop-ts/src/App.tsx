@@ -32,19 +32,12 @@ function App() {
   return (
     <div className={theme == "dark" ? "dark" : "light"}>
       <Nav />
-      {/* <Routes> */}
-      {/* <Route path="/" element={<Home />} />
-        <Route path="/fashion" element={<Fashion />} />
-        <Route path="/accessory" element={<Accessory />} />
-        <Route path="/digital" element={<Digital />} />
-        <Route path="/product/:productId" element={<ProductDetail />} />
-        <Route path="*" element={<NotFound />} /> */}
-      {/* </Routes> */}
-
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/:category" element={<CategoryLayout />} />
+        <Route path="/product" element={<NotFound />} />
         <Route path="/product/:productId" element={<ProductDetail />} />
+
         <Route path="*" element={<NotFound />} />
       </Routes>
     </div>
