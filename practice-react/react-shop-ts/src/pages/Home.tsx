@@ -1,8 +1,8 @@
 import React from "react";
 import CarouselSlide from "../components/Carousel";
-import Fashion from "./Fashion";
-import Accessory from "./Accessory";
-import Digital from "./Digital";
+import { useParams } from "react-router-dom";
+
+import CategoryLayout from "../components/Category/CategoryLayout";
 
 interface CarouselItem {
   title: string;
@@ -12,7 +12,7 @@ interface CarouselItem {
 }
 
 export default function Home() {
-  const categoryName = "홈";
+  const { category = "home" } = useParams<{ category: string }>();
 
   // 캐러셀 옵션 및 아이템
   const carouselOptions = {
@@ -26,19 +26,19 @@ export default function Home() {
     {
       title: "물빠진 청바지!",
       describe: "이제 막 도착한 패션 청바지를 구경해 보세요.",
-      img: "/src/assets/carousel/img_shop_fashion.jpeg",
+      img: "https://github.com/geniee1220/practice/blob/main/practice-react/react-shop-ts/src/assets/carousel/img_shop_fashion.jpeg?raw=true",
       target: "/fashion",
     },
     {
       title: "신속한 업무처리!",
       describe: "다양한 디지털 상품을 둘러보세요.",
-      img: "/src/assets/carousel/img_shop_digital.jpeg",
+      img: "https://github.com/geniee1220/practice/blob/main/practice-react/react-shop-ts/src/assets/carousel/img_shop_digital.jpeg?raw=true",
       target: "/digital",
     },
     {
       title: "신선한 식품!",
       describe: "농장 직배송으로 더욱 신선한 식료품을 구경해보세요.",
-      img: "/src/assets/carousel/img_shop_grocery.jpeg",
+      img: "https://github.com/geniee1220/practice/blob/main/practice-react/react-shop-ts/src/assets/carousel/img_shop_grocery.jpeg?raw=true",
       target: "/grocery",
     },
   ];
@@ -49,9 +49,8 @@ export default function Home() {
         carouselItem={carouselItem}
         carouselOptions={carouselOptions}
       />
-      <Fashion pageType={categoryName} />
-      <Accessory pageType={categoryName} />
-      <Digital pageType={categoryName} />
+
+      <CategoryLayout pageType={category}></CategoryLayout>
     </>
   );
 }
