@@ -5,12 +5,8 @@ import { themeState } from "./recoil/atoms/globalState";
 
 import Nav from "./components/Nav";
 import Home from "./pages/Home";
-import Fashion from "./pages/Fashion";
 import ProductDetail from "./pages/ProductDetail";
 import NotFound from "./pages/NotFound";
-import Accessory from "./pages/Accessory";
-import Digital from "./pages/Digital";
-import Layout from "./pages/Layout";
 import CategoryLayout from "./components/Category/CategoryLayout";
 
 function App() {
