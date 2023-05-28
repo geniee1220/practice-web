@@ -10,11 +10,18 @@ html(lang="ko")
         header
             h1 Joom
         main
-            ul
-            form#nickname
-                input(type="text", placeholder="닉네임을 입력하세요", required)
-                button Save
-            form#message
-                input(type="text", placeholder="메세지를 작성하세요", required)
-                button Send
+            div#welcome 
+                form 
+                    input(placeholder="채팅방 이름을 입력하세요", type="text" required)
+                    button Enter Room
+            div#room
+                h3 
+                ul
+                form#nickname
+                    input(placeholder="닉네임을 입력하세요", type="text" required)
+                    button Save
+                form#message
+                    input(placeholder="메세지를 입력하세요", type="text" required)
+                    button Send
+        script(src="/socket.io/socket.io.js")
         script(src="public/js/app.js")

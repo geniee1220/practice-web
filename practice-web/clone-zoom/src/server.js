@@ -1,6 +1,7 @@
 import express from "express";
-import WebSocket from "ws";
 import http from "http";
+import SocketIO from "socket.io";
+// import WebSocket from "ws";
 
 const app = express();
 app.set("view engine", "pug");
@@ -15,33 +16,58 @@ const handleListen = () => {
 
 // app.listen(3000, handleListen);
 
-const server = http.createServer(app);
-const wss = new WebSocket.Server({ server });
+const httpServer = http.createServer(app);
+const wsServer = SocketIO(httpServer);
 
-const sockets = [];
-
-// callback 으로 socket 을 받아서 사용할 수 있다.
-wss.on("connection", (socket) => {
-  sockets.push(socket);
+wsServer.on("connection", (socket) => {
+  wsServer.socketsJoin("announcement");
   socket["nickname"] = "Anonymous";
-  console.log("Connected to Browser ✅");
-
-  socket.on("close", () => console.log("Disconnected from the Browser ❌"));
-
-  socket.on("message", (msg) => {
-    // const messageString = message.toString("utf8");
-    const message = JSON.parse(msg);
-
-    switch (message.type) {
-      case "new_message":
-        sockets.forEach((aSocket) =>
-          aSocket.send(`${socket.nickname} : ${message.payload}`)
-        );
-
-      case "nickname":
-        socket["nickname"] = message.payload;
-    }
+  socket.onAny((event) => {
+    console.log(`Socket Event: ${event}`);
+  });
+  socket.on("enter_room", (roomName, done) => {
+    socket.join(roomName);
+    done();
+    socket.to(roomName).emit("welcome", socket.nickname);
+  });
+  socket.on("new_message", (message, room, done) => {
+    socket.to(room).emit("new_message", `${socket.nickname}: ${message}`);
+    done();
+  });
+  socket.on("nickname", (nickname) => (socket["nickname"] = nickname));
+  socket.on("disconnecting", () => {
+    socket.rooms.forEach((room) =>
+      socket.to(room).emit("bye", socket.nickname)
+    );
   });
 });
 
-server.listen(3000, handleListen);
+// websocket code
+// const wss = new WebSocket.Server({ server });
+// const sockets = [];
+
+// // callback 으로 socket 을 받아서 사용할 수 있다.
+// wss.on("connection", (socket) => {
+//   sockets.push(socket);
+//   socket["nickname"] = "Anonymous";
+//   console.log("Connected to Browser ✅");
+
+//   socket.on("close", () => console.log("Disconnected from the Browser ❌"));
+
+//   socket.on("message", (msg) => {
+//     // const messageString = message.toString("utf8");
+//     const message = JSON.parse(msg);
+
+//     switch (message.type) {
+//       case "new_message":
+//         sockets.forEach((aSocket) =>
+//           aSocket.send(`${socket.nickname} : ${message.payload}`)
+//         );
+
+//       case "nickname":
+//         socket["nickname"] = message.payload;
+//     }
+//   });
+// });
+
+httpServer.listen(3000, handleListen);
