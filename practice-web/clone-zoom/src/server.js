@@ -18,11 +18,30 @@ const handleListen = () => {
 const server = http.createServer(app);
 const wss = new WebSocket.Server({ server });
 
-const handleConection = (socket) => {
-  console.log(socket);
-};
+const sockets = [];
 
 // callback 으로 socket 을 받아서 사용할 수 있다.
-wss.on("connection", handleConection);
+wss.on("connection", (socket) => {
+  sockets.push(socket);
+  socket["nickname"] = "Anonymous";
+  console.log("Connected to Browser ✅");
+
+  socket.on("close", () => console.log("Disconnected from the Browser ❌"));
+
+  socket.on("message", (msg) => {
+    // const messageString = message.toString("utf8");
+    const message = JSON.parse(msg);
+
+    switch (message.type) {
+      case "new_message":
+        sockets.forEach((aSocket) =>
+          aSocket.send(`${socket.nickname} : ${message.payload}`)
+        );
+
+      case "nickname":
+        socket["nickname"] = message.payload;
+    }
+  });
+});
 
 server.listen(3000, handleListen);
