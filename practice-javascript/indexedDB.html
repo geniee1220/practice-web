@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+
+</body>
+<script>
+    // IndexdeDB에 데이터를 추가하는 함수
+    function addDataToIndexedDB(data) {
+        const request = window.indexedDB.open("database_name", 1);
+
+        request.onupgradeneeded = function (event) {
+            const db = event.target.result;
+            const objectStore = db.createObjectStore("store_name", { keyPath: "id", autoIncrement: true });
+        };
+
+        request.onsuccess = function (event) {
+            const db = event.target.result;
+            const transaction = db.transaction(["store_name"], "readwrite");
+            const objectStore = transaction.objectStore("store_name");
+
+            const addRequest = objectStore.add(data);
+
+            addRequest.onsuccess = function (event) {
+                console.log("Data added to database.");
+            };
+
+            transaction.oncomplete = function (event) {
+                db.close();
+            };
+        };
+    }
+
+    const data = { name: "Geniee" };
+    addDataToIndexedDB(data);
+
+    // IndexdeDB에서 전체 데이터를 가져오는 함수
+    // retrieveDataFromIndexedDB 함수는 데이터를 가져온 후에 콜백 함수를 호출합니다.
+    function retrieveDataFromIndexedDB(callback) {
+        const request = window.indexedDB.open("database_name", 1);
+
+        request.onsuccess = function (event) {
+            const db = event.target.result;
+            const transaction = db.transaction(["store_name"], "readonly");
+            const objectStore = transaction.objectStore("store_name");
+
+            const data = [];
+
+            objectStore.openCursor().onsuccess = function (event) {
+                const cursor = event.target.result;
+
+                // cursor가 존재하면 데이터를 가져오고 cursor가 존재하지 않으면 콜백 함수를 호출합니다.
+                // cursor가 존재하지 않는 경우는 데이터를 모두 가져온 경우 
+                if (cursor) {
+                    data.push(cursor.value);
+                    cursor.continue();
+                } else {
+                    callback(data);
+                }
+            };
+        };
+    }
+    retrieveDataFromIndexedDB(function (data) {
+        console.log(data);
+        // 가져온 데이터는 여기서 사용 가능합니다.
+    });
+
+    // IndexedDB에서 특정 데이터를 가져오는 함수
+    function findDataInIndexedDB(key, callback) {
+        const request = window.indexedDB.open("database_name", 1);
+
+        request.onsuccess = function (event) {
+            const db = event.target.result;
+            const transaction = db.transaction(["store_name"], "readonly");
+            const objectStore = transaction.objectStore("store_name");
+
+            const getRequest = objectStore.get(key);
+
+            getRequest.onsuccess = function (event) {
+                const data = event.target.result;
+                callback(data);
+            };
+        };
+    }
+    findDataInIndexedDB(1, function (data) {
+        console.log('특정 키의 데이터를 조회합니다.', data);
+        // 가져온 데이터는 여기서 사용 가능합니다.
+    });
+
+    // IndexedDB의 데이터를 수정하는 함수
+    function updateDataInIndexedDB(key, newData) {
+        const request = window.indexedDB.open("database_name", 1);
+
+        request.onsuccess = function (event) {
+            const db = event.target.result;
+            const transaction = db.transaction(["store_name"], "readwrite");
+            const objectStore = transaction.objectStore("store_name");
+
+            const getRequest = objectStore.get(key);
+
+            getRequest.onsuccess = function (event) {
+                const data = event.target.result;
+                // Update the retrieved data with the new data
+                const updateRequest = objectStore.put(newData);
+
+                updateRequest.onsuccess = function (event) {
+                    console.log('Data updated in database.');
+                };
+            };
+        };
+    }
+
+    updateDataInIndexedDB(1, { id: 1, name: "Updated Geniee" });
+
+</script>
+
+</html>
