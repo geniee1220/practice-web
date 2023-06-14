@@ -1,133 +1,66 @@
 const socket = io();
 
-const welcome = document.querySelector("#welcome");
-const form = welcome.querySelector("form");
-const room = document.querySelector("#room");
+const video = document.getElementById('video');
+const muteButton = document.getElementById('mute');
+const cameraButton = document.getElementById('camera');
 
-room.hidden = true;
+// 스트림은 비디오와 오디오를 포함하는 미디어 데이터
+let mediaStream;
+let isMuted = false;
+let isCameraOff = false;
 
-let roomName;
+// 비동기로 미디어 데이터를 가져오는 함수
+const getMedia = async () => {
+  try {
+    // 미디어 데이터를 가져온다.
+    mediaStream = await navigator.mediaDevices.getUserMedia({
+      audio: true,
+      video: true,
+    });
 
-const addMessage = (message) => {
-  const ul = room.querySelector("ul");
-  const li = document.createElement("li");
-  li.innerText = message;
-  ul.append(li);
+    console.log(mediaStream);
+
+    // 비디오 태그에 미디어 데이터를 넣는다.
+    // srcObject란 비디오 태그에 미디어 데이터를 넣는 속성
+    video.srcObject = mediaStream;
+
+    // 비디오를 재생한다.
+    video.play();
+  } catch (error) {}
 };
 
-const handleMessageSubmit = (event) => {
-  event.preventDefault();
-  const input = room.querySelector("#message input");
-  const value = input.value;
-  socket.emit("new_message", input.value, roomName, () => {
-    addMessage(`You : ${value}`);
+// 음소거 버튼 클릭 이벤트
+const handleMuteButton = () => {
+  mediaStream.getAudioTracks().forEach((track) => {
+    track.enabled = !track.enabled;
   });
-  input.value = "";
-};
 
-const handleNicknameSubmit = (event) => {
-  event.preventDefault();
-  const input = room.querySelector("#nickname input");
-  socket.emit("nickname", input.value);
-};
-
-const showRoom = () => {
-  welcome.hidden = true;
-  room.hidden = false;
-
-  const h3 = room.querySelector("h3");
-  h3.innerText = `Room ${roomName}`;
-
-  const messageForm = room.querySelector("#message");
-  const nicknameForm = room.querySelector("#nickname");
-  messageForm.addEventListener("submit", handleMessageSubmit);
-  nicknameForm.addEventListener("submit", handleNicknameSubmit);
-};
-
-const handleRoomSubmit = (event) => {
-  event.preventDefault();
-  const input = form.querySelector("input");
-  socket.emit("enter_room", input.value, showRoom);
-  roomName = input.value;
-  input.value = "";
-};
-
-form.addEventListener("submit", handleRoomSubmit);
-
-socket.on("welcome", (user, newCount) => {
-  const h3 = room.querySelector("h3");
-  h3.innerText = `Room ${roomName} (${newCount})`;
-  addMessage(`${user} 님이 입장하셨습니다.`);
-});
-
-socket.on("bye", (left, newCount) => {
-  const h3 = room.querySelector("h3");
-  h3.innerText = `Room ${roomName} (${newCount})`;
-  addMessage(`${left} 님이 퇴장하셨습니다.`);
-});
-
-socket.on("new_message", addMessage);
-
-socket.on("room_change", (rooms) => {
-  const roomList = welcome.querySelector("ul");
-  roomList.innerHTML = "";
-
-  if (rooms.length === 0) {
-    return;
+  if (!isMuted) {
+    muteButton.innerText = 'Unmute';
+    isMuted = true;
+  } else {
+    muteButton.innerText = 'Mute';
+    isMuted = false;
   }
+};
 
-  rooms.forEach((room) => {
-    const li = document.createElement("li");
-    li.innerText = room;
-    roomList.append(li);
+// 카메라 끄기 버튼 클릭 이벤트
+const handleCameraButton = () => {
+  mediaStream.getVideoTracks().forEach((track) => {
+    track.enabled = !track.enabled;
+    console.log(track);
   });
-});
 
-// websocket code
-// const socket = new WebSocket(`ws://${window.location.host}`);
+  if (!isCameraOff) {
+    cameraButton.innerText = 'Turn off Camera';
+    isCameraOff = true;
+  } else {
+    cameraButton.innerText = 'Turn on Camera';
+    isCameraOff = false;
+  }
+};
 
-// const messageList = document.querySelector("ul");
-// const messageForm = document.querySelector("#message");
-// const nicknameForm = document.querySelector("#nickname");
+muteButton.addEventListener('click', handleMuteButton);
+cameraButton.addEventListener('click', handleCameraButton);
 
-// socket.addEventListener("open", () => {
-//   console.log("Connected to Server ✅");
-// });
-
-// socket.addEventListener("message", (message) => {
-//   // message의 data, timeStamp 등의 정보를 가지고 있다.
-//   const li = document.createElement("li");
-//   li.innerText = message.data;
-//   messageList.append(li);
-// });
-
-// socket.addEventListener("close", () => {
-//   console.log("Disconnected from Server ❌");
-// });
-
-// const makeMessage = (type, payload) => {
-//   const message = { type, payload };
-//   return JSON.stringify(message);
-// };
-
-// const handleSubmit = (event) => {
-//   event.preventDefault();
-//   const input = messageForm.querySelector("input");
-//   socket.send(makeMessage("new_message", input.value));
-
-//   const li = document.createElement("li");
-//   li.innerText = `You : ${input.value}`;
-//   messageList.append(li);
-
-//   input.value = "";
-// };
-
-// const handleNicknameSubmit = (event) => {
-//   event.preventDefault();
-//   const input = nicknameForm.querySelector("input");
-//   socket.send(makeMessage("nickname", input.value));
-//   input.value = "";
-// };
-
-// messageForm.addEventListener("submit", handleSubmit);
-// nicknameForm.addEventListener("submit", handleNicknameSubmit);
+getMedia();
