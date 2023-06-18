@@ -1,10 +1,10 @@
-import axios from "axios";
-import { ProductListParams } from "./model";
+import axios from 'axios';
+import { ProductListParams } from './model';
 
 export async function getProducts() {
   try {
     const response = await axios.get<ProductListParams[]>(
-      "https://fakestoreapi.com/products"
+      'https://fakestoreapi.com/products'
     );
     const products = response.data;
     return products;
@@ -13,6 +13,7 @@ export async function getProducts() {
     return null;
   }
 }
+
 export async function getProductById(productId: string | undefined) {
   try {
     const response = await axios.get<ProductListParams>(

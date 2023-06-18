@@ -1,5 +1,6 @@
-import React from "react";
-import { ProductListParams } from "../../../apis/products/model";
+import React from 'react';
+import { ProductListParams } from '../../../apis/products/model';
+import { useLocation } from 'react-router-dom';
 
 interface DetailProps {
   productData: ProductListParams | null | undefined;
@@ -55,7 +56,7 @@ export default function Detail({ productData }: DetailProps) {
                 {productData?.rating.rate} / {productData?.rating.count} 참여
               </div>
             </div>
-            <p className="mt-2 mb-4 text-3xl">{"$" + productData?.price}</p>
+            <p className="mt-2 mb-4 text-3xl">{'$' + productData?.price}</p>
             <div className="card-actions">
               <button className="btn btn-primary">장바구니에 담기</button>
               <a className="btn btn-outline ml-1" href="/cart">

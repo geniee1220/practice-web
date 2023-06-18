@@ -1,7 +1,7 @@
-import React, { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
-import { useRecoilState } from "recoil";
-import { themeState } from "../../recoil/atoms/globalState";
+import React, { useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
+import { useRecoilState } from 'recoil';
+import { themeState } from '../../recoil/atoms/globalState';
 
 interface CategoryItem {
   title: string;
@@ -11,7 +11,7 @@ interface CategoryItem {
 export default function Nav() {
   const [theme, setTheme] = useRecoilState(themeState);
   const [isChecked, setIsChecked] = useState<boolean>(() => {
-    if (localStorage.getItem("isChecked") === "true") {
+    if (localStorage.getItem('isChecked') === 'true') {
       return true;
     } else {
       return false;
@@ -19,35 +19,35 @@ export default function Nav() {
   });
 
   useEffect(() => {
-    if (localStorage.getItem("theme") === "dark") {
-      localStorage.setItem("isChecked", JSON.stringify(false));
+    if (localStorage.getItem('theme') === 'dark') {
+      localStorage.setItem('isChecked', JSON.stringify(false));
     } else {
-      localStorage.setItem("isChecked", JSON.stringify(true));
+      localStorage.setItem('isChecked', JSON.stringify(true));
     }
   }, [isChecked]);
 
   const categoryList: CategoryItem[] = [
     {
-      title: "패션",
-      target: "/fashion",
+      title: '패션',
+      target: '/fashion',
     },
     {
-      title: "액세서리",
-      target: "accessory",
+      title: '액세서리',
+      target: 'accessory',
     },
     {
-      title: "디지털",
-      target: "/digital",
+      title: '디지털',
+      target: '/digital',
     },
   ];
 
   const handleThemeChange = () => {
-    if (localStorage.getItem("theme") === "dark") {
-      localStorage.setItem("theme", "light");
-      setTheme(localStorage.getItem("theme") as string);
+    if (localStorage.getItem('theme') === 'dark') {
+      localStorage.setItem('theme', 'light');
+      setTheme(localStorage.getItem('theme') as string);
     } else {
-      localStorage.setItem("theme", "dark");
-      setTheme(localStorage.getItem("theme") as string);
+      localStorage.setItem('theme', 'dark');
+      setTheme(localStorage.getItem('theme') as string);
     }
 
     setIsChecked(!isChecked);

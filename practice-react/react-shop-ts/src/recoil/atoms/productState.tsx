@@ -1,8 +1,7 @@
-import { atom } from "recoil";
+import { atom } from 'recoil';
+import { ProductListParams } from '../../apis/products/model';
 
-interface ProductList {}
-
-export const productListState = atom<ProductList[]>({
-  key: "productListState",
+export const productListState = atom<ProductListParams[] | undefined>({
+  key: 'productListState',
   default: [],
 });
