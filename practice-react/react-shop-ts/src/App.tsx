@@ -1,6 +1,7 @@
+import './index.css';
 import { useEffect } from 'react';
 import { useRecoilState } from 'recoil';
-import { BrowserRouter, Routes, Route, Outlet } from 'react-router-dom';
+import { Routes, Route } from 'react-router-dom';
 import { themeState } from './recoil/atoms/globalState';
 import { getProducts } from './apis/products';
 import { ProductListParams } from './apis/products/model';

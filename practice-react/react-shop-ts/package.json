@@ -4,8 +4,8 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "dev": "vite && npx tailwindcss -i ./src/tailwind.css -o ./dist/output.css --watch",
-    "build": "tsc && vite build",
+    "dev": "vite && npx tailwindcss -i ./src/tailwind.css -o ./public/output.css --watch",
+    "build": "tsc && npx tailwindcss -i ./src/tailwind.css -o ./public/output.css && vite build",
     "preview": "vite preview"
   },
   "dependencies": {
