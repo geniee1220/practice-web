@@ -14,7 +14,26 @@ export default function Detail({ productData }: DetailProps) {
   const countedRate = Math.floor(rate / 0.5); // 채워야하는 별 계산
 
   // 장바구니에 담기
-  const onClickAddCart = () => {};
+  const onClickAddCart = () => {
+    // 로컬 스토리지에 장바구니 데이터 확인
+    const cart = localStorage.getItem('cart');
+    // 로컬 스토리지에 장바구니 데이터가 있으면 가져오고 없으면 빈 배열로 초기화
+    const cartList = cart ? JSON.parse(cart) : [];
+    // 로컬 스토리지에 장바구니 데이터가 있으면 해당 상품이 있는지 확인
+    const existItem = cartList.find(
+      (item: { id: string }) =>
+        item.id === (productData?.id as unknown as string)
+    );
+    // 장바구니에 해당 상품이 있으면 수량을 1 증가
+    if (existItem) {
+      existItem.quantity += 1;
+    } else {
+      // 장바구니에 해당 상품이 없으면 수량을 1로 초기화
+      cartList.push({ ...productData, quantity: 1 });
+    }
+    // 로컬 스토리지에 장바구니 데이터 저장
+    localStorage.setItem('cart', JSON.stringify(cartList));
+  };
 
   return (
     <>
