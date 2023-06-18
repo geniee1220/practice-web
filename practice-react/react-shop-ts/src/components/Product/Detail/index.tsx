@@ -7,9 +7,18 @@ interface DetailProps {
 }
 
 export default function Detail({ productData }: DetailProps) {
+  if (!productData) return null;
+
+  const MAX_RATE = 10; // 최대 별점
+  const rate = productData?.rating.rate; // 상품의 별점
+  const countedRate = Math.floor(rate / 0.5); // 채워야하는 별 계산
+
+  // 장바구니에 담기
+  const onClickAddCart = () => {};
+
   return (
     <>
-      {productData && (
+      {productData ? (
         <div className="lg:flex lg:items-center mt-6 md:mt-14 px-2 lg:px-0">
           <figure className="flex-shrink-0 rounded-2xl overflow-hidden px-4 py-4 bg-white view_image">
             <img
@@ -25,32 +34,21 @@ export default function Detail({ productData }: DetailProps) {
             </h2>
             <p>{productData?.description}</p>
             <div className="flex items-center mt-3">
-              <div className="rating">
-                <input
-                  type="radio"
-                  name="rating-2"
-                  className="mask mask-star-2 bg-orange-400"
-                />
-                <input
-                  type="radio"
-                  name="rating-2"
-                  className="mask mask-star-2 bg-orange-400"
-                />
-                <input
-                  type="radio"
-                  name="rating-2"
-                  className="mask mask-star-2 bg-orange-400"
-                />
-                <input
-                  type="radio"
-                  name="rating-2"
-                  className="mask mask-star-2 bg-orange-400"
-                />
-                <input
-                  type="radio"
-                  name="rating-2"
-                  className="mask mask-star-2 bg-orange-400"
-                />
+              <div className="rating rating-half">
+                {[...Array(MAX_RATE)].map((_, index) => {
+                  return (
+                    <input
+                      key={index}
+                      type="radio"
+                      name="rating-10"
+                      className={`bg-yellow-400 cursor-default mask mask-star-2 mask-half-${
+                        index % 2 === 0 ? 1 : 2
+                      }`}
+                      disabled
+                      checked={index < countedRate}
+                    />
+                  );
+                })}
               </div>
               <div className="ml-2">
                 {productData?.rating.rate} / {productData?.rating.count} 참여
@@ -58,13 +56,17 @@ export default function Detail({ productData }: DetailProps) {
             </div>
             <p className="mt-2 mb-4 text-3xl">{'$' + productData?.price}</p>
             <div className="card-actions">
-              <button className="btn btn-primary">장바구니에 담기</button>
+              <button className="btn btn-primary" onClick={onClickAddCart}>
+                장바구니에 담기
+              </button>
               <a className="btn btn-outline ml-1" href="/cart">
                 장바구니로 이동
               </a>
             </div>
           </div>
         </div>
+      ) : (
+        <div>로딩 중입니다.</div>
       )}
     </>
   );
