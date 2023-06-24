@@ -3,10 +3,11 @@
 ## 기술 스택
 
 - Vite
+- TypeScript
 - React.js
   - Recoil
-  - TypeScript
-  - Tailwind.css
+  - Styled Components
+  - Tailwind.css / Daisy UI
 - Vercel
 
 ## 주요 기능
