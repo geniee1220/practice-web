@@ -1527,6 +1527,19 @@
             </g>
         </svg>
     </div>
+    <div id="main-content-wrapper">
+        <p id="document-title">아름다운 금수강산</p>
+        <div id="mountain-tag-wrapper">
+            <ul class="mountain-content-wrapper">
+                <li class="mountain-content-list">지리산</li>
+                <li class="mountain-content-list">금강산</li>
+            </ul>
+            <ul class="mountain-content-wrapper">
+                <li class="mountain-content-list">한라산</li>
+                <li class="mountain-content-list">북한산</li>
+            </ul>
+        </div>
+    </div>
 </body>
 
 <script>
@@ -1575,6 +1588,16 @@
             document.getElementById("active-menu").removeAttribute("id")
 
             element.setAttribute("id", "active-menu")
+        })
+    })
+
+    const link = document.querySelector('a[href="#document-title"]')
+
+    link.addEventListener("click", () => {
+        event.preventDefault()
+
+        document.querySelector("#document-title").scrollIntoView({
+            behavior: "smooth"
         })
     })
 
