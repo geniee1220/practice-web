@@ -23,5 +23,49 @@ canvas.width = canvasWidth * dpr;
 canvas.height = canvasHeight * dpr;
 ctx.scale(dpr, dpr);
 
+// ----- 1. 캔버스에 사각형 그리기
 // x, y, width, height
-ctx.fillRect(10, 10, 50, 50);
+// ctx.fillRect(10, 10, 50, 50);
+
+// ----- 2. 캔버스에 원 그리기
+// ctx.beginPath();
+// // x, y, radius, startAngle, endAngle, anticlockwise
+// // x, y, 반지름, 시작 각도, 끝 각도, 시계 반대 방향으로 그릴 것인지
+// ctx.arc(100, 100, 50, 0, (Math.PI / 180) * 360);
+
+// // ctx.fill(); // 채우기
+// // ctx.fillStyle = 'red'; // 채우기 색상 변경
+// ctx.stroke(); // 선만 그리기
+
+// ctx.closePath();
+
+// ----- 3. 캔버스에 파티클 그리기
+class Particle {
+  constructor(x, y, radius) {
+    this.x = x;
+    this.y = y;
+    this.radius = radius;
+  }
+
+  draw() {
+    ctx.beginPath();
+    ctx.arc(this.x, this.y, this.radius, 0, (Math.PI / 180) * 360);
+    ctx.fillStyle = 'red';
+    ctx.fill();
+    ctx.closePath();
+  }
+}
+
+const particle = new Particle(100, 100, 30);
+
+// ----- 4. 캔버스에 파티클 애니메이션 그리기
+// requestAnimationFrame을 사용하여 애니메이션을 그려준다. 재귀 호출을 통해 애니메이션을 그려준다.
+function animate() {
+  window.requestAnimationFrame(animate);
+
+  // 모든 프레임을 지우고 다시 그려준다.
+  ctx.clearRect(0, 0, canvasWidth, canvasHeight);
+  particle.draw();
+}
+
+animate();
