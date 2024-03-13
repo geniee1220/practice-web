@@ -23,6 +23,45 @@ canvas.width = canvasWidth * dpr;
 canvas.height = canvasHeight * dpr;
 ctx.scale(dpr, dpr);
 
+// ----- dat.GUI
+const feGaussianBlur = document.querySelector('feGaussianBlur');
+const feColorMatrix = document.querySelector('feColorMatrix');
+
+const controls = new (function () {
+  this.blurValue = 40;
+  this.alphaChannel = 100;
+  this.alphaOffset = -23;
+  this.acc = 1.03;
+})();
+
+let gui = new dat.GUI();
+
+// 4가지 인자를 받는다.
+// 첫번째 인자로 controls, 두번째 인자로 속성명, 세번째 인자로 최소값, 네번째 인자로 최대값
+const f1 = gui.addFolder('Gooey Effect');
+f1.open();
+f1.add(controls, 'blurValue', 0, 100).onChange((v) => {
+  feGaussianBlur.setAttribute('stdDeviation', v);
+});
+f1.add(controls, 'alphaChannel', 1, 200).onChange((v) => {
+  feColorMatrix.setAttribute(
+    'values',
+    `1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 ${v} ${controls.alphaOffset}`
+  );
+});
+f1.add(controls, 'alphaOffset', -40, 40).onChange((v) => {
+  feColorMatrix.setAttribute(
+    'values',
+    `1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 ${controls.alphaChannel} ${v}`
+  );
+});
+const f2 = gui.addFolder('Particle Property');
+
+f2.open();
+f2.add(controls, 'acc', 1, 1.5, 0.01).onChange((v) => {
+  particles.forEach((particle) => (particle.acc = v));
+});
+
 // ----- 1. 캔버스에 사각형 그리기
 // x, y, width, height
 // ctx.fillRect(10, 10, 50, 50);
