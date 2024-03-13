@@ -46,8 +46,10 @@ class Particle {
     this.y = y;
     this.radius = radius;
     this.vy = vy;
+    this.acc = 1.03;
   }
   update() {
+    this.vy *= this.acc;
     this.y += this.vy;
   }
   draw() {
@@ -59,7 +61,7 @@ class Particle {
   }
 }
 
-const TOTAL = 5;
+const TOTAL = 20;
 const random = (min, max) => Math.random() * (max - min + 1) + min;
 
 let particles = [];
