@@ -20,14 +20,35 @@
         }
 
         canvas {
-            background-color: #f1f1f1;
+            filter: url(#gooey);
+            /* filter: blur(50px) contrast(50); */
+            /* background-color: #f1f1f1; */
         }
     </style>
 </head>
 
 <body>
     <canvas></canvas>
+    <svg>
+        <defs>
+            <filter id="gooey">
+                <!-- 
+                    차례대로 
+                    in : 어떤 요소를 필터링할 것인지
+                    stdDeviation : 흐림 정도
+                    result : 필터링된 결과를 어떤 이름으로 저장할 것인지
+                -->
+                <feGaussianBlur in="SourceGraphic" stdDeviation="40" result="blur1" />
 
+                <!-- 
+                    마지막 행렬의 100은 투명도를 나타냄
+                    SVG Filters 페이지에서 svg 필터 효과를 확인할 수 있다.
+                 -->
+                <feColorMatrix in="blur1" mode="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 100 -23">
+                </feColorMatrix>
+            </filter>
+        </defs>
+    </svg>
 
     <script type="module" src="./index.js"></script>
 </body>
