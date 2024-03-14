@@ -1,27 +1,46 @@
 const canvas = document.querySelector('canvas');
-
 const ctx = canvas.getContext('2d');
+const dpr = window.devicePixelRatio;
+let canvasWidth;
+let canvasHeight;
+let particles;
 console.log(ctx);
 
 // 캔버스의 크기를 지정해주지 않으면 기본값으로 300 * 150으로 설정된다.
 // 만약 css로 크기를 지정해주면, 캔버스 내부의 픽셀들은 늘어나지 않는다.
 // 따라서 캔버스의 크기도 함께 지정해주어야 한다.
-const canvasWidth = innerWidth;
-const canvasHeight = innerHeight;
 
-canvas.style.width = canvasWidth + 'px';
-canvas.style.height = canvasHeight + 'px';
+function init() {
+  canvasWidth = innerWidth;
+  canvasHeight = innerHeight;
 
-canvas.width = canvasWidth;
-canvas.height = canvasHeight;
+  canvas.style.width = canvasWidth + 'px';
+  canvas.style.height = canvasHeight + 'px';
 
-// DPR이 2 이상이라면 더 높은 해상도의 캔버스를 그려준다.
-console.log(window.devicePixelRatio);
+  canvas.width = canvasWidth;
+  canvas.height = canvasHeight;
 
-const dpr = window.devicePixelRatio;
-canvas.width = canvasWidth * dpr;
-canvas.height = canvasHeight * dpr;
-ctx.scale(dpr, dpr);
+  // DPR이 2 이상이라면 더 높은 해상도의 캔버스를 그려준다.
+  console.log(window.devicePixelRatio);
+
+  canvas.width = canvasWidth * dpr;
+  canvas.height = canvasHeight * dpr;
+  ctx.scale(dpr, dpr);
+
+  // 파티클 생성
+  particles = [];
+  const TOTAL = canvasWidth / 10;
+
+  for (let i = 0; i < TOTAL; i++) {
+    const x = random(0, canvasWidth);
+    const y = random(0, canvasHeight);
+    const radius = random(50, 100);
+    const vy = random(1, 5);
+    const particle = new Particle(x, y, radius, vy);
+
+    particles.push(particle);
+  }
+}
 
 // ----- dat.GUI
 const feGaussianBlur = document.querySelector('feGaussianBlur');
@@ -100,20 +119,7 @@ class Particle {
   }
 }
 
-const TOTAL = 20;
 const random = (min, max) => Math.random() * (max - min + 1) + min;
-
-let particles = [];
-
-for (let i = 0; i < TOTAL; i++) {
-  const x = random(0, canvasWidth);
-  const y = random(0, canvasHeight);
-  const radius = random(50, 100);
-  const vy = random(1, 5);
-  const particle = new Particle(x, y, radius, vy);
-
-  particles.push(particle);
-}
 
 let interval = 1000 / 60;
 let now, delta;
@@ -146,4 +152,11 @@ function animate() {
   then = now - (delta % interval);
 }
 
-animate();
+window.addEventListener('load', () => {
+  init();
+  animate();
+});
+
+window.addEventListener('resize', () => {
+  init();
+});
