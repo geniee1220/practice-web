@@ -23,6 +23,14 @@ function render() {
   let now, delta;
   let then = Date.now();
 
+  const x = innerWidth / 2;
+  let y = innerHeight / 2;
+
+  const width = 50;
+  const height = 50;
+  let widthAlpha = 0;
+  let deg = 0;
+
   const frame = () => {
     requestAnimationFrame(frame);
 
@@ -30,9 +38,27 @@ function render() {
     delta = now - then;
 
     if (delta < interval) return;
+    ctx.clearRect(0, 0, canvasWidth, canvasHeight);
 
+    widthAlpha += 0.01;
+    deg += 0.01;
+    y += 1;
+
+    ctx.translate(x + width, y + height);
+    ctx.rotate(deg);
+    ctx.translate(-x - width, -y - height);
+
+    // Math.cos,sin를 이용하여 너비가 변하는 사각형을 그리기
+    // clearRect를 사용하지 않으면 원형으로 그려진다.
     ctx.fillStyle = 'red';
-    ctx.fillRect(200, 200, 50, 50);
+    ctx.fillRect(
+      x,
+      y,
+      width * Math.cos(widthAlpha),
+      height * Math.sin(widthAlpha)
+    );
+
+    ctx.resetTransform();
 
     then = now - (delta % interval);
   };
