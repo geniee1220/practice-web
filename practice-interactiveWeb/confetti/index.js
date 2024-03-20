@@ -21,12 +21,6 @@ function init() {
   canvas.width = canvasWidth * dpr;
   canvas.height = canvasHeight * dpr;
   ctx.scale(dpr, dpr);
-
-  confetti({
-    x: canvasWidth / 2,
-    y: canvasHeight / 2,
-    count: 10,
-  });
 }
 
 function confetti({ x, y, count, deg, colors, shapes, spread }) {
@@ -38,6 +32,7 @@ function confetti({ x, y, count, deg, colors, shapes, spread }) {
 function render() {
   let now, delta;
   let then = Date.now();
+  let deg = 0;
 
   const frame = () => {
     requestAnimationFrame(frame);
@@ -47,6 +42,8 @@ function render() {
 
     if (delta < interval) return;
     ctx.clearRect(0, 0, canvasWidth, canvasHeight);
+
+    deg += 1;
 
     // confetti({
     //   x: 0,
@@ -84,11 +81,36 @@ function render() {
     //   spread: 1
     // })
 
+    confetti({
+      x: 0.5,
+      y: 0.5,
+      count: 5,
+      deg: 225 + deg,
+      spread: 1,
+    });
+
+    confetti({
+      x: 0.5,
+      y: 0.5,
+      count: 5,
+      deg: 90 + deg,
+      spread: 1,
+    });
+
+    confetti({
+      x: 0.5,
+      y: 0.5,
+      count: 5,
+      deg: 315 + deg,
+      spread: 1,
+    });
+
     for (let i = particles.length - 1; i >= 0; i--) {
       particles[i].update();
       particles[i].draw(ctx);
 
       if (particles[i].opacity < 0) particles.splice(i, 1);
+      if (particles[i].y > canvasHeight) particles.splice(i, 1);
     }
 
     then = now - (delta % interval);
