@@ -29,9 +29,9 @@ function init() {
   });
 }
 
-function confetti({ x, y, count, deg, colors }) {
+function confetti({ x, y, count, deg, colors, shapes, spread }) {
   for (let i = 0; i < count; i++) {
-    particles.push(new Particle(x, y, deg, colors));
+    particles.push(new Particle(x, y, deg, colors, shapes, spread));
   }
 }
 
@@ -47,6 +47,42 @@ function render() {
 
     if (delta < interval) return;
     ctx.clearRect(0, 0, canvasWidth, canvasHeight);
+
+    // confetti({
+    //   x: 0,
+    //   y: 0.5,
+    //   count: 6,
+    //   deg: -50,
+    // })
+
+    // confetti({
+    //   x: 1,
+    //   y: 0.5,
+    //   count: 6,
+    //   deg: -130,
+    // })
+
+    // confetti({
+    //   x: 0,
+    //   y: 0,
+    //   count: 6,
+    //   deg: 45,
+    // })
+
+    // confetti({
+    //   x: 1,
+    //   y: 0,
+    //   count: 6,
+    //   deg: 135,
+    // })
+
+    // confetti({
+    //   x: 0.5,
+    //   y: 0.5,
+    //   count: 5,
+    //   deg: 270,
+    //   spread: 1
+    // })
 
     for (let i = particles.length - 1; i >= 0; i--) {
       particles[i].update();
@@ -66,7 +102,7 @@ window.addEventListener('click', () => {
     y: 0.5,
     deg: -50,
     count: 10,
-    colors: ['#ff577f'],
+    spread: 1,
   });
 });
 window.addEventListener('resize', init);
