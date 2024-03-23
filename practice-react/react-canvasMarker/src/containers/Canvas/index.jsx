@@ -1,9 +1,12 @@
+import { useRef } from 'react';
 import * as S from './styles';
 
 function Canvas() {
+  const canvasRef = useRef(null);
+
   return (
     <S.CanvasContainer>
-      <canvas></canvas>
+      <canvas ref={canvasRef}></canvas>
     </S.CanvasContainer>
   );
 }
