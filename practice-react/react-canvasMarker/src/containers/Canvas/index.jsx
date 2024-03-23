@@ -146,6 +146,8 @@ function Canvas() {
           ctx.fillText('1', x - 1, y + 3);
         };
       }
+
+      saveMarkerCoordsDebounced([{ x, y }]);
     }
 
     window.addEventListener('resize', resize);
