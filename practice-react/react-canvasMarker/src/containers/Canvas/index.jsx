@@ -3,7 +3,8 @@ import * as S from './styles';
 
 function Canvas() {
   const canvasRef = useRef(null);
-  const markerPositionRef = useRef(null); // To store the current marker position
+  const markerPositionRef = useRef(null);
+  const activeMarkerRef = useRef(null);
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -55,7 +56,41 @@ function Canvas() {
 
       clearMarker();
       drawMarker(x, y);
-      markerPositionRef.current = { x, y }; // Update marker position
+      markerPositionRef.current = { x, y };
+    }
+
+    function handleMouseDown(event) {
+      const rect = canvas.getBoundingClientRect();
+      const x = event.clientX - rect.left;
+      const y = event.clientY - rect.top;
+
+      if (markerPositionRef.current) {
+        const { x: markerX, y: markerY } = markerPositionRef.current;
+        const distance = Math.sqrt((x - markerX) ** 2 + (y - markerY) ** 2);
+        if (distance <= 5) {
+          activeMarkerRef.current = { x: markerX, y: markerY };
+          canvas.addEventListener('mousemove', handleMouseMove);
+          canvas.addEventListener('mouseup', handleMouseUp);
+        }
+      }
+    }
+
+    function handleMouseMove(event) {
+      const rect = canvas.getBoundingClientRect();
+      const x = event.clientX - rect.left;
+      const y = event.clientY - rect.top;
+
+      if (activeMarkerRef.current) {
+        clearMarker();
+        drawMarker(x, y);
+        activeMarkerRef.current = { x, y };
+      }
+    }
+
+    function handleMouseUp() {
+      canvas.removeEventListener('mousemove', handleMouseMove);
+      canvas.removeEventListener('mouseup', handleMouseUp);
+      activeMarkerRef.current = null;
     }
 
     function clearMarker() {
@@ -72,11 +107,13 @@ function Canvas() {
 
     window.addEventListener('resize', resize);
     canvas.addEventListener('click', handleClick);
+    canvas.addEventListener('mousedown', handleMouseDown);
     resize();
 
     return () => {
       window.removeEventListener('resize', resize);
       canvas.removeEventListener('click', handleClick);
+      canvas.removeEventListener('mousedown', handleMouseDown);
     };
   }, []);
 
