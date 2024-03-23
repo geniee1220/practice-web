@@ -6,10 +6,6 @@ function App() {
     <main>
       <h3>캔버스 - 마커 구현</h3>
       <Canvas />
-
-      <br />
-      <h3>캔버스 - 회전 기능 구현</h3>
-      <Canvas />
     </main>
   );
 }

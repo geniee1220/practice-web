@@ -1,8 +1,10 @@
-import { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import * as S from './styles';
 
 function Canvas() {
   const canvasRef = useRef(null);
+  const markerRef = useRef(null);
+  const [markerPosition, setMarkerPosition] = useState({ x: 0, y: 0 });
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -12,8 +14,6 @@ function Canvas() {
     const imageSrcs = ['https://source.unsplash.com/random'];
     const loadedImages = [];
     let currIndex = 0;
-    let prevPos = { x: 0, y: 0 };
-    let isChanging = false;
 
     let canvasWidth, canvasHeight;
 
@@ -25,7 +25,7 @@ function Canvas() {
       canvas.width = canvasWidth;
       canvas.height = canvasHeight;
 
-      preloadImages().then(() => drawImage());
+      drawImage();
     }
 
     function preloadImages() {
@@ -44,23 +44,66 @@ function Canvas() {
     }
 
     function drawImage() {
-      isChanging = true;
       const image = loadedImages[currIndex];
       ctx.clearRect(0, 0, canvas.width, canvas.height);
       ctx.drawImage(image, 0, 0, canvas.width, canvas.height);
+
+      // Draw marker
+      if (markerRef.current) {
+        ctx.fillStyle = 'red';
+        ctx.beginPath();
+        ctx.arc(markerPosition.x, markerPosition.y, 5, 0, 2 * Math.PI);
+        ctx.fill();
+      }
+    }
+
+    function handleCanvasClick(event) {
+      const rect = canvas.getBoundingClientRect();
+      let mouseX = event.clientX - rect.left;
+      let mouseY = event.clientY - rect.top;
+      let markerWidth = 10;
+      let markerHeight = 10;
+
+      setMarkerPosition({ x: mouseX, y: mouseY });
+    }
+
+    function handleMarkerDrag(event) {
+      const rect = canvas.getBoundingClientRect();
+      const mouseX = event.clientX - rect.left;
+      const mouseY = event.clientY - rect.top;
+      setMarkerPosition({ x: mouseX, y: mouseY });
     }
 
     window.addEventListener('resize', resize);
-    resize();
+    canvas.addEventListener('click', handleCanvasClick);
+
+    preloadImages().then(() => drawImage());
 
     return () => {
       window.removeEventListener('resize', resize);
+      canvas.removeEventListener('click', handleCanvasClick);
     };
-  }, []);
+  }, [markerPosition]);
 
   return (
     <S.CanvasContainer>
       <canvas ref={canvasRef}></canvas>
+      <div
+        ref={markerRef}
+        style={{
+          position: 'absolute',
+          left: markerPosition.x,
+          top: markerPosition.y,
+          cursor: 'pointer',
+          width: '10px',
+          height: '10px',
+          borderRadius: '50%',
+          backgroundColor: 'red',
+          zIndex: 999,
+        }}
+        draggable
+        onDrag={(event) => handleMarkerDrag(event)}
+      ></div>
     </S.CanvasContainer>
   );
 }
