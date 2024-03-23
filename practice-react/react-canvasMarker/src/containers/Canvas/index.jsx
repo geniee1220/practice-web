@@ -1,10 +1,20 @@
-import { useEffect, useRef } from 'react';
+import { useEffect, useState, useRef } from 'react';
+import { debounce } from 'lodash';
+
 import * as S from './styles';
+import Marker from '../../assets/styles/marker_default.svg';
 
 function Canvas() {
   const canvasRef = useRef(null);
   const markerPositionRef = useRef(null);
   const activeMarkerRef = useRef(null);
+  const [markerCoords, setMarkerCoords] = useState([]);
+
+  const saveMarkerCoordsDebounced = useRef(
+    debounce((coords) => {
+      setMarkerCoords(coords);
+    }, 250)
+  ).current;
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -99,10 +109,17 @@ function Canvas() {
     }
 
     function drawMarker(x, y) {
-      ctx.beginPath();
-      ctx.arc(x, y, 5, 0, 2 * Math.PI);
-      ctx.fillStyle = 'red';
-      ctx.fill();
+      const marker = new Image();
+      marker.src = Marker;
+      ctx.drawImage(marker, x - 24, y - 24, 48, 48);
+
+      // 안에 텍스트 넣기
+      ctx.font = '16px Arial';
+      ctx.fillStyle = 'white';
+      ctx.textAlign = 'center';
+      ctx.fillText('1', x - 1, y + 3);
+
+      saveMarkerCoordsDebounced([{ x, y }]);
     }
 
     window.addEventListener('resize', resize);
@@ -116,6 +133,10 @@ function Canvas() {
       canvas.removeEventListener('mousedown', handleMouseDown);
     };
   }, []);
+
+  useEffect(() => {
+    console.log(markerCoords);
+  }, [markerCoords]);
 
   return (
     <S.CanvasContainer>
