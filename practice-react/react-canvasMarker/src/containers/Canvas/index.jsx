@@ -9,6 +9,7 @@ function Canvas() {
   const markerPositionRef = useRef(null);
   const activeMarkerRef = useRef(null);
   const [markerCoords, setMarkerCoords] = useState([]);
+  const [tooltipVisible, setTooltipVisible] = useState(false);
 
   const saveMarkerCoordsDebounced = useRef(
     debounce((coords) => {
@@ -108,23 +109,10 @@ function Canvas() {
       drawImage();
     }
 
-    // 버전 1
-    // function drawMarker(x, y) {
-    //   const marker = new Image();
+    function clearTooltip() {
+      clearMarker();
+    }
 
-    //   marker.src = Marker;
-    //   ctx.drawImage(marker, x - 24, y - 24, 48, 48);
-
-    //   // 안에 텍스트 넣기
-    //   ctx.font = '16px Arial';
-    //   ctx.fillStyle = 'white';
-    //   ctx.textAlign = 'center';
-    //   ctx.fillText('1', x - 1, y + 3);
-
-    //   saveMarkerCoordsDebounced([{ x, y }]);
-    // }
-
-    // 버전 2
     const markerImage = new Image();
     markerImage.src = Marker;
 
@@ -136,6 +124,12 @@ function Canvas() {
         ctx.fillStyle = 'white';
         ctx.textAlign = 'center';
         ctx.fillText('1', x - 1, y + 3);
+
+        // 툴팁
+        ctx.fillStyle = 'rgba(0, 0, 0, 0.7)';
+        ctx.fillRect(x - 20, y + 24, 40, 20);
+        ctx.fillStyle = 'white';
+        ctx.fillText('Tooltip', x, y + 40);
       } else {
         markerImage.onload = function () {
           ctx.drawImage(markerImage, x - 24, y - 24, 48, 48);
@@ -144,6 +138,12 @@ function Canvas() {
           ctx.fillStyle = 'white';
           ctx.textAlign = 'center';
           ctx.fillText('1', x - 1, y + 3);
+
+          // 툴팁
+          ctx.fillStyle = 'rgba(0, 0, 0, 0.7)';
+          ctx.fillRect(x - 20, y + 24, 40, 20);
+          ctx.fillStyle = 'white';
+          ctx.fillText('Tooltip', x, y + 40);
         };
       }
 
