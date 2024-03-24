@@ -4,12 +4,31 @@ import { debounce } from 'lodash';
 import * as S from './styles';
 import Marker from '../../assets/styles/marker_default.svg';
 
+function Tooltip({ x, y }) {
+  if (!x || !y) return null;
+
+  return (
+    <div
+      style={{
+        position: 'absolute',
+        left: x - 24,
+        top: y + 24,
+        backgroundColor: '#000',
+        color: '#fff',
+      }}
+    >
+      Tooltip2
+    </div>
+  );
+}
+
 function Canvas() {
   const canvasRef = useRef(null);
   const markerPositionRef = useRef(null);
   const activeMarkerRef = useRef(null);
   const [markerCoords, setMarkerCoords] = useState([]);
-  const [tooltipVisible, setTooltipVisible] = useState(false);
+  const [tooltipVisible, setTooltipVisible] = useState(true);
+  const [firstMarkerPlaced, setFirstMarkerPlaced] = useState(false);
 
   const saveMarkerCoordsDebounced = useRef(
     debounce((coords) => {
@@ -124,12 +143,6 @@ function Canvas() {
         ctx.fillStyle = 'white';
         ctx.textAlign = 'center';
         ctx.fillText('1', x - 1, y + 3);
-
-        // 툴팁
-        ctx.fillStyle = 'rgba(0, 0, 0, 0.7)';
-        ctx.fillRect(x - 20, y + 24, 40, 20);
-        ctx.fillStyle = 'white';
-        ctx.fillText('Tooltip', x, y + 40);
       } else {
         markerImage.onload = function () {
           ctx.drawImage(markerImage, x - 24, y - 24, 48, 48);
@@ -138,12 +151,6 @@ function Canvas() {
           ctx.fillStyle = 'white';
           ctx.textAlign = 'center';
           ctx.fillText('1', x - 1, y + 3);
-
-          // 툴팁
-          ctx.fillStyle = 'rgba(0, 0, 0, 0.7)';
-          ctx.fillRect(x - 20, y + 24, 40, 20);
-          ctx.fillStyle = 'white';
-          ctx.fillText('Tooltip', x, y + 40);
         };
       }
 
@@ -162,13 +169,23 @@ function Canvas() {
     };
   }, []);
 
+  // 처음 찍은 마커에만 툴팁을 보여주기
   useEffect(() => {
-    console.log(markerCoords);
+    if (markerCoords.length > 0 && !firstMarkerPlaced) {
+      setTooltipVisible(true);
+      setFirstMarkerPlaced(true);
+    } else {
+      setTooltipVisible(false);
+    }
   }, [markerCoords]);
 
   return (
     <S.CanvasContainer>
       <canvas ref={canvasRef}></canvas>
+
+      {tooltipVisible && (
+        <Tooltip x={markerCoords[0]?.x} y={markerCoords[0]?.y} />
+      )}
     </S.CanvasContainer>
   );
 }
