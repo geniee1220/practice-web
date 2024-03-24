@@ -15,6 +15,7 @@ function Tooltip({ x, y }) {
         top: y + 24,
         backgroundColor: '#000',
         color: '#fff',
+        zIndex: 10,
       }}
     >
       Tooltip2
@@ -55,6 +56,20 @@ function Canvas() {
       canvas.width = canvasWidth;
       canvas.height = canvasHeight;
 
+      // 리사이즈 하면 마커의 위치도 비율에 맞게 변경한 뒤 다시 그리기
+      if (markerCoords.length > 0) {
+        const { x, y } = markerCoords[0];
+        const ratioX = x / canvasWidth;
+        const ratioY = y / canvasHeight;
+
+        markerCoords[0] = {
+          x: canvasWidth * ratioX,
+          y: canvasHeight * ratioY,
+        };
+
+        clearMarker();
+        drawMarker(canvasWidth * ratioX, canvasHeight * ratioY);
+      }
       preloadImages().then(() => drawImage());
     }
 
@@ -128,10 +143,6 @@ function Canvas() {
       drawImage();
     }
 
-    function clearTooltip() {
-      clearMarker();
-    }
-
     const markerImage = new Image();
     markerImage.src = Marker;
 
@@ -171,6 +182,8 @@ function Canvas() {
 
   // 처음 찍은 마커에만 툴팁을 보여주기
   useEffect(() => {
+    console.log(...markerCoords, 'markerCoords');
+
     if (markerCoords.length > 0 && !firstMarkerPlaced) {
       setTooltipVisible(true);
       setFirstMarkerPlaced(true);
@@ -180,13 +193,15 @@ function Canvas() {
   }, [markerCoords]);
 
   return (
-    <S.CanvasContainer>
-      <canvas ref={canvasRef}></canvas>
+    <S.CanvasWrapper>
+      <S.CanvasContainer>
+        <canvas ref={canvasRef}></canvas>
 
-      {tooltipVisible && (
-        <Tooltip x={markerCoords[0]?.x} y={markerCoords[0]?.y} />
-      )}
-    </S.CanvasContainer>
+        {tooltipVisible && (
+          <Tooltip x={markerCoords[0]?.x} y={markerCoords[0]?.y} />
+        )}
+      </S.CanvasContainer>
+    </S.CanvasWrapper>
   );
 }
 
