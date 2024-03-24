@@ -42,10 +42,12 @@ function Canvas() {
     const canvasParent = canvas.parentNode;
     const ctx = canvas.getContext('2d');
 
+    const markerImage = new Image();
+    markerImage.src = Marker;
+
     const imageSrcs = ['https://source.unsplash.com/random'];
     const loadedImages = [];
     let currIndex = 0;
-
     let canvasWidth, canvasHeight;
 
     function resize() {
@@ -56,21 +58,25 @@ function Canvas() {
       canvas.width = canvasWidth;
       canvas.height = canvasHeight;
 
-      // 리사이즈 하면 마커의 위치도 비율에 맞게 변경한 뒤 다시 그리기
-      if (markerCoords.length > 0) {
-        const { x, y } = markerCoords[0];
-        const ratioX = x / canvasWidth;
-        const ratioY = y / canvasHeight;
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-        markerCoords[0] = {
-          x: canvasWidth * ratioX,
-          y: canvasHeight * ratioY,
-        };
+      preloadImages()
+        .then(() => drawImage())
+        .then(() => {
+          if (markerPositionRef.current) {
+            const originalCanvasWidth = 588;
+            const originalCanvasHeight = 588;
+            const { x, y } = markerPositionRef.current;
 
-        clearMarker();
-        drawMarker(canvasWidth * ratioX, canvasHeight * ratioY);
-      }
-      preloadImages().then(() => drawImage());
+            const ratioX = canvasWidth / originalCanvasWidth;
+            const ratioY = canvasHeight / originalCanvasHeight;
+
+            const newX = x * ratioX;
+            const newY = y * ratioY;
+
+            drawMarker(newX, newY);
+          }
+        });
     }
 
     function preloadImages() {
@@ -142,9 +148,6 @@ function Canvas() {
       ctx.clearRect(0, 0, canvas.width, canvas.height);
       drawImage();
     }
-
-    const markerImage = new Image();
-    markerImage.src = Marker;
 
     function drawMarker(x, y, text = '1') {
       if (markerImage.complete) {
