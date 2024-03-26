@@ -3,6 +3,7 @@ import { debounce } from 'lodash';
 
 import * as S from './styles';
 import Marker from '../../assets/styles/marker_default.svg';
+import Disabled from '../../assets/styles/marker_disabled.svg';
 
 function Tooltip({ x, y }) {
   if (!x || !y) return null;
@@ -26,6 +27,12 @@ function Tooltip({ x, y }) {
   );
 }
 
+const DISABLED_MARKER_ARRAY = [
+  { x: 100, y: 100 },
+  { x: 200, y: 200 },
+  { x: 300, y: 300 },
+];
+
 function Canvas() {
   const canvasRef = useRef(null);
   const markerPositionRef = useRef(null);
@@ -48,6 +55,9 @@ function Canvas() {
     const markerImage = new Image();
     markerImage.src = Marker;
 
+    const disabledImage = new Image();
+    disabledImage.src = Disabled;
+
     const imageSrcs = ['https://source.unsplash.com/random'];
     const loadedImages = [];
     let currIndex = 0;
@@ -66,17 +76,24 @@ function Canvas() {
       preloadImages()
         .then(() => drawImage())
         .then(() => {
+          const originalCanvasWidth = 588;
+          const originalCanvasHeight = 588;
+
+          const ratioX = canvasWidth / originalCanvasWidth;
+          const ratioY = canvasHeight / originalCanvasHeight;
+
+          // 비활성화된 마커 재조정 및 재그리기
+          DISABLED_MARKER_ARRAY.forEach((coords, index) => {
+            const newX = coords.x * ratioX;
+            const newY = coords.y * ratioY;
+            disabledDrawMarker(newX, newY, index);
+          });
+
+          // 활성화된 마커 재조정 및 재그리기
           if (markerPositionRef.current) {
-            const originalCanvasWidth = 588;
-            const originalCanvasHeight = 588;
             const { x, y } = markerPositionRef.current;
-
-            const ratioX = canvasWidth / originalCanvasWidth;
-            const ratioY = canvasHeight / originalCanvasHeight;
-
             const newX = x * ratioX;
             const newY = y * ratioY;
-
             drawMarker(newX, newY);
           }
         });
@@ -111,6 +128,14 @@ function Canvas() {
       clearMarker();
       drawMarker(x, y);
       markerPositionRef.current = { x, y };
+
+      DISABLED_MARKER_ARRAY.forEach(({ x, y }, index) => {
+        const ratioX = canvasRef.current.width / 588;
+        const ratioY = canvasRef.current.height / 588;
+        const newX = x * ratioX;
+        const newY = y * ratioY;
+        disabledDrawMarker(newX, newY, index);
+      });
     }
 
     function handleMouseDown(event) {
@@ -139,6 +164,14 @@ function Canvas() {
         drawMarker(x, y);
         activeMarkerRef.current = { x, y };
       }
+
+      DISABLED_MARKER_ARRAY.forEach(({ x, y }, index) => {
+        const ratioX = canvasRef.current.width / 588;
+        const ratioY = canvasRef.current.height / 588;
+        const newX = x * ratioX;
+        const newY = y * ratioY;
+        disabledDrawMarker(newX, newY, index);
+      });
     }
 
     function handleMouseUp() {
@@ -152,14 +185,20 @@ function Canvas() {
       drawImage();
     }
 
-    function drawMarker(x, y, text = '1') {
+    function drawMarker(x, y) {
+      const text = (
+        DISABLED_MARKER_ARRAY.length +
+        markerCoords.length +
+        1
+      ).toString();
+
       if (markerImage.complete) {
         ctx.drawImage(markerImage, x - 24, y - 24, 48, 48);
 
         ctx.font = '16px Arial';
         ctx.fillStyle = 'white';
         ctx.textAlign = 'center';
-        ctx.fillText('1', x - 1, y + 3);
+        ctx.fillText(text, x - 1, y + 3);
       } else {
         markerImage.onload = function () {
           ctx.drawImage(markerImage, x - 24, y - 24, 48, 48);
@@ -167,20 +206,42 @@ function Canvas() {
           ctx.font = '16px Arial';
           ctx.fillStyle = 'white';
           ctx.textAlign = 'center';
-          ctx.fillText('1', x - 1, y + 3);
+          ctx.fillText(text, x - 1, y + 3);
         };
       }
 
       saveMarkerCoordsDebounced([{ x, y }]);
     }
 
-    window.addEventListener('resize', resize);
+    function disabledDrawMarker(x, y, index) {
+      const text = (index + 1).toString();
+
+      if (disabledImage.complete) {
+        ctx.drawImage(disabledImage, x - 16, y - 20, 32, 40);
+
+        ctx.font = '16px Arial';
+        ctx.fillStyle = '#1e1e1e';
+        ctx.textAlign = 'center';
+        ctx.fillText(text, x - 1, y + 4);
+      } else {
+        disabledImage.onload = function () {
+          ctx.drawImage(disabledImage, x - 16, y - 20, 32, 40);
+
+          ctx.font = '16px Arial';
+          ctx.fillStyle = '#1e1e1e';
+          ctx.textAlign = 'center';
+          ctx.fillText(text, x - 1, y + 4);
+        };
+      }
+    }
+
+    window.addEventListener('resize', debounce(resize, 100));
     canvas.addEventListener('click', handleClick);
     canvas.addEventListener('mousedown', handleMouseDown);
     resize();
 
     return () => {
-      window.removeEventListener('resize', resize);
+      window.removeEventListener('resize', debounce(resize, 100));
       canvas.removeEventListener('click', handleClick);
       canvas.removeEventListener('mousedown', handleMouseDown);
     };
