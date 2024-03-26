@@ -11,14 +11,17 @@ function Tooltip({ x, y }) {
     <div
       style={{
         position: 'absolute',
-        left: x - 24,
+        width: '280px',
+        left: x - 140,
         top: y + 24,
-        backgroundColor: '#000',
-        color: '#fff',
+        borderRadius: '4px',
+        backgroundColor: '#FBEAE9',
+        color: '#000',
+        padding: '8px 16px',
         zIndex: 10,
       }}
     >
-      Tooltip2
+      마커를 하자의 위치로 드래그하세요.
     </div>
   );
 }
