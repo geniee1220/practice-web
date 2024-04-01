@@ -1,5 +1,5 @@
-function Main() {
+function Page() {
   return <div>Next14</div>;
 }
 
-export default Main;
+export default Page;
