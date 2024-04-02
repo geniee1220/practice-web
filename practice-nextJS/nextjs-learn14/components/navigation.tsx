@@ -15,8 +15,8 @@ function Navigation() {
           {path === '/' && <span>🏠</span>}
         </li>
         <li>
-          <Link href="/about">About</Link>
-          {path === '/about' && <span>📚</span>}
+          <Link href="/about-us">About</Link>
+          {path === '/about-us' && <span>📚</span>}
         </li>
       </ul>
     </nav>
