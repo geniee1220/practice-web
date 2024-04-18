@@ -6,6 +6,7 @@
   "compilerOptions": {
     "outDir": "build",
     "target": "es5", // 컴파일된 파일의 자바스크립트 버전 설정,
-    "lib": ["es5", "DOM"] // 컴파일된 파일이 동작할 환경 설정
+    "lib": ["es5", "DOM"], // 컴파일된 파일이 동작할 환경 설정
+    "strict": true
   }
 }
