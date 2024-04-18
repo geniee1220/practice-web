@@ -1,3 +1,7 @@
-import { init } from 'myPackage';
+import { init, exit } from 'myPackage';
 
-const hello = () => 'hi';
+init({
+  url: 'http://example.com',
+});
+
+exit(0);
