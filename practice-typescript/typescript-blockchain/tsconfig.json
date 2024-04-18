@@ -5,9 +5,10 @@
   // 컴파일된 파일을 저장할 디렉토리 설정
   "compilerOptions": {
     "outDir": "build",
-    "target": "es5", // 컴파일된 파일의 자바스크립트 버전 설정,
-    "lib": ["es5", "DOM"], // 컴파일된 파일이 동작할 환경 설정
-    "allowJs": true, // 자바스크립트 파일을 컴파일할 수 있도록 설정
-    "strict": true
+    "target": "es6", // 컴파일된 파일의 자바스크립트 버전 설정,
+    "lib": ["es6"],
+    "strict": true,
+    "esModuleInterop": true,
+    "module": "commonjs" // 브라우저라면 umd
   }
 }
