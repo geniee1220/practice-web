@@ -1,4 +1,21 @@
 {
   "name": "practice",
-  "packageManager": "yarn@4.1.1"
+  "packageManager": "yarn@4.1.1",
+  "private": true,
+  "workspaces": {
+    "packages": [
+      "practice-algorithm/**/*",
+      "practice-interactiveWeb/**/*",
+      "practice-javascript/**/*",
+      "practice-nextJS/**/*",
+      "practice-react/**/*",
+      "practice-typescript/**/*",
+      "practice-vue/**/*",
+      "practice-web/**/*",
+      "practice-webserver/**/*"
+    ]
+  },
+  "scripts": {
+    "canvasmarker": "yarn workspace react-canvasmarker run dev"
+  }
 }
