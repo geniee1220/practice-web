@@ -16,6 +16,7 @@
     ]
   },
   "scripts": {
-    "canvasmarker": "yarn workspace react-canvasmarker run dev"
+    "dev:canvasmarker": "yarn workspace react-canvasmarker run dev",
+    "dev:testing": "yarn workspace testing-vitest run dev"
   }
 }
