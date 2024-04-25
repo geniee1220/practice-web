@@ -12,7 +12,8 @@
       "practice-typescript/**/*",
       "practice-vue/**/*",
       "practice-web/**/*",
-      "practice-webserver/**/*"
+      "practice-webserver/**/*",
+      "practice-testing/**/*"
     ]
   },
   "scripts": {
