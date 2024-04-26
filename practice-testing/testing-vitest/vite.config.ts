@@ -1,5 +1,10 @@
-import { defineConfig } from "vite";
+import { defineConfig, UserConfig } from "vite";
+import type { InlineConfig } from "vitest";
 import react from "@vitejs/plugin-react";
+
+interface VitestConfigExport extends UserConfig {
+  test: InlineConfig;
+}
 
 // https://vitejs.dev/config/
 export default defineConfig({
@@ -8,6 +13,6 @@ export default defineConfig({
     include: ["__test__/*.{test,spec}.{js,jsx,ts,tsx}"],
     environment: "jsdom",
     globals: true,
-    setupFiles: ["@testing-library/jest-dom"],
+    setupFiles: ["setting/setupTests.ts"],
   },
-});
+} as VitestConfigExport);
